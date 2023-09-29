@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using vabalas_api.Dtos;
 using vabalas_api.Models;
+using vabalas_api.Repositories;
 using vabalas_api.Service;
 
 namespace vabalas_api.Controllers
