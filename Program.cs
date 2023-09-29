@@ -1,3 +1,5 @@
+global using vabalas_api.Data;
+global using Microsoft.EntityFrameworkCore;
 
 namespace vabalas_api
 {
@@ -7,9 +9,22 @@ namespace vabalas_api
         {
             var builder = WebApplication.CreateBuilder(args);
 
-            // Add services to the container.
+            DotNetEnv.Env.Load();
 
+            // Adding dotenv
+            var configuration = new ConfigurationBuilder()
+                .AddJsonFile("appsettings.json")
+                .Build();
+            configuration["ConnectionStrings:DefaultConnection"] = configuration["ConnectionStrings:DefaultConnection"]
+                .Replace("DB_CONNECTION", Environment.GetEnvironmentVariable("DB_CONNECTION"));
+
+            // Add services to the container.
+            builder.Configuration.AddConfiguration(configuration);
             builder.Services.AddControllers();
+            builder.Services.AddDbContext<DataContext>(options =>
+            {
+                options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
+            });
             // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddSwaggerGen();
