@@ -8,6 +8,8 @@ namespace vabalas_api.Repositories
 
         Task<User> GetById(int userId);
 
+        Task<User> GetByEmail(string email);
+
         Task<User> Add(User user);
 
         Task<User> Update(User user);

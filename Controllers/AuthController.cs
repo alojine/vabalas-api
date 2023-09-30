@@ -16,8 +16,6 @@ namespace vabalas_api.Controllers
     {
         private readonly IUserRepository _userRepository;
 
-        public static User user = new User();
-
         public AuthController (IUserRepository userRepository)
         {
             _userRepository = userRepository;
@@ -26,15 +24,36 @@ namespace vabalas_api.Controllers
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserRegisterDto userDto)
         {
-            string passwordHash = Bcrypt.Net.BCrypt.HashPassword(userDto.Password);
-
+            string passwordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
+            var user = new User();
+            
             user.Firstname = userDto.Firstname;
             user.Lastname = userDto.Lastname;
+            user.Email = userDto.Email;
             user.PasswordHash = passwordHash;
             user.createdAt = DateTime.UtcNow;
             user.updatedAt = DateTime.UtcNow;
+            
 
-            return Ok(_userRepository.Add(user));
+            return Ok(await _userRepository.Add(user));
         }
+
+        [HttpPost("login")]
+        public async Task<ActionResult<User>> Login(UserLoginDto userDto)
+        {
+            var user = await _userRepository.GetByEmail(userDto.Email);
+
+            if(user.Email != userDto.Email)
+            {
+                return BadRequest("User not found.");
+            }
+
+            if(!BCrypt.Net.BCrypt.Verify(userDto.Password, user.PasswordHash))
+            {
+                return BadRequest("Wrong password.");
+            }
+
+            return Ok(user);
+        } 
     }
 }

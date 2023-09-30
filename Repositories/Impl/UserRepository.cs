@@ -22,6 +22,11 @@ namespace vabalas_api.Repositories.Impl
             return await _context.Users.FindAsync(userId);
         }
 
+        public async Task<User> GetByEmail(string email)
+        {
+            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        }
+
         public async Task<User> Add(User user)
         {
             _context.Users.Add(user);
