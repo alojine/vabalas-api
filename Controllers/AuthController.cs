@@ -1,6 +1,8 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using BCrypt.Net;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
+using Org.BouncyCastle.Crypto.Generators;
 using vabalas_api.Dtos;
 using vabalas_api.Models;
 using vabalas_api.Repositories;
@@ -12,28 +14,27 @@ namespace vabalas_api.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly PasswordService passwordService;
+        private readonly IUserRepository _userRepository;
 
         public static User user = new User();
 
-        public AuthController(PasswordService passwordService)
+        public AuthController (IUserRepository userRepository)
         {
-            this.passwordService = passwordService;
+            _userRepository = userRepository;
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<User>> Register(UserRegisterDto userDto)
         {
-            passwordService.CreatePasswordHash(userDto.Password, out byte[] passwordHash, out byte[] passwordSalt);
-            
+            string passwordHash = Bcrypt.Net.BCrypt.HashPassword(userDto.Password);
+
             user.Firstname = userDto.Firstname;
             user.Lastname = userDto.Lastname;
             user.PasswordHash = passwordHash;
-            user.PasswordSalt = passwordSalt;
             user.createdAt = DateTime.UtcNow;
             user.updatedAt = DateTime.UtcNow;
 
-            return Ok(user);
+            return Ok(_userRepository.Add(user));
         }
     }
 }
