@@ -2,6 +2,7 @@ global using vabalas_api.Data;
 global using Microsoft.EntityFrameworkCore;
 using vabalas_api.Repositories;
 using vabalas_api.Repositories.Impl;
+using Swashbuckle.AspNetCore.Swagger;
 
 namespace vabalas_api
 {
