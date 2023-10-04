@@ -2,6 +2,8 @@ global using vabalas_api.Data;
 global using Microsoft.EntityFrameworkCore;
 using vabalas_api.Repositories;
 using vabalas_api.Repositories.Impl;
+using vabalas_api.Service;
+using vabalas_api.Service.Impl;
 
 namespace vabalas_api
 {
@@ -13,13 +15,17 @@ namespace vabalas_api
 
             DotNetEnv.Env.Load();
 
-            // Adding dotenv
+            // Env variables
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
-            configuration["ConnectionStrings:DefaultConnection"] = configuration["ConnectionStrings:DefaultConnection"]
+
+            configuration["ConnectionStrings:DefaultConnection"] = configuration["ConnectionStrings:DefaultConnection"]!
                 .Replace("{DB_SERVER}", Environment.GetEnvironmentVariable("DB_SERVER"))
                 .Replace("{DB_NAME}", Environment.GetEnvironmentVariable("DB_NAME"));
+
+            configuration["AppSettings:Token"] = configuration["AppSettings:Token"]!
+                .Replace("{JWT_SECRET}", Environment.GetEnvironmentVariable("JWT_SECRET"));
 
             // Add services to the container.
             builder.Configuration.AddConfiguration(configuration);
@@ -28,9 +34,13 @@ namespace vabalas_api
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
+            // repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
+
+            // actual services
+            builder.Services.AddScoped<JwtService, JwtServiceImpl>();
             builder.Services.AddSwaggerGen();
 
             var app = builder.Build();
