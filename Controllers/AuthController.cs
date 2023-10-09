@@ -15,10 +15,12 @@ namespace vabalas_api.Controllers
     public class AuthController : ControllerBase
     {
         private readonly IUserRepository _userRepository;
+        private readonly JwtService _jwtService;
 
-        public AuthController (IUserRepository userRepository)
+        public AuthController (IUserRepository userRepository, JwtService jwtService)
         {
             _userRepository = userRepository;
+            _jwtService = jwtService;
         }
 
         [HttpPost("register")]
@@ -53,7 +55,9 @@ namespace vabalas_api.Controllers
                 return BadRequest("Wrong password.");
             }
 
-            return Ok(user);
+            string token = _jwtService.CreateToken(user);
+
+            return Ok(token);
         } 
     }
 }

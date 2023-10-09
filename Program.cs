@@ -2,7 +2,13 @@ global using vabalas_api.Data;
 global using Microsoft.EntityFrameworkCore;
 using vabalas_api.Repositories;
 using vabalas_api.Repositories.Impl;
+using vabalas_api.Service;
+using vabalas_api.Service.Impl;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 using Swashbuckle.AspNetCore.Swagger;
+
 
 namespace vabalas_api
 {
@@ -14,13 +20,17 @@ namespace vabalas_api
 
             DotNetEnv.Env.Load();
 
-            // Adding dotenv
+            // Env variables
             var configuration = new ConfigurationBuilder()
                 .AddJsonFile("appsettings.json")
                 .Build();
-            configuration["ConnectionStrings:DefaultConnection"] = configuration["ConnectionStrings:DefaultConnection"]
+
+            configuration["ConnectionStrings:DefaultConnection"] = configuration["ConnectionStrings:DefaultConnection"]!
                 .Replace("{DB_SERVER}", Environment.GetEnvironmentVariable("DB_SERVER"))
                 .Replace("{DB_NAME}", Environment.GetEnvironmentVariable("DB_NAME"));
+
+            configuration["AppSettings:Token"] = configuration["AppSettings:Token"]!
+                .Replace("{JWT_SECRET}", Environment.GetEnvironmentVariable("JWT_SECRET"));
 
             // Add services to the container.
             builder.Configuration.AddConfiguration(configuration);
@@ -29,10 +39,27 @@ namespace vabalas_api
             {
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
-            // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
             builder.Services.AddEndpointsApiExplorer();
+
+            // repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddSwaggerGen();
+
+            // actual services
+            builder.Services.AddScoped<JwtService, JwtServiceImpl>();
+
+            // Authentication
+            builder.Services.AddAuthentication().AddJwtBearer();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
 
             var app = builder.Build();
 
@@ -44,12 +71,8 @@ namespace vabalas_api
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }
