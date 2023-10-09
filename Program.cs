@@ -4,6 +4,9 @@ using vabalas_api.Repositories;
 using vabalas_api.Repositories.Impl;
 using vabalas_api.Service;
 using vabalas_api.Service.Impl;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.OpenApi.Models;
+using Swashbuckle.AspNetCore.Filters;
 
 namespace vabalas_api
 {
@@ -41,7 +44,20 @@ namespace vabalas_api
 
             // actual services
             builder.Services.AddScoped<JwtService, JwtServiceImpl>();
-            builder.Services.AddSwaggerGen();
+
+            // Authentication
+            builder.Services.AddAuthentication().AddJwtBearer();
+            builder.Services.AddSwaggerGen(options =>
+            {
+                options.AddSecurityDefinition("oauth2", new OpenApiSecurityScheme
+                {
+                    In = ParameterLocation.Header,
+                    Name = "Authorization",
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                options.OperationFilter<SecurityRequirementsOperationFilter>();
+            });
 
             var app = builder.Build();
 
@@ -53,12 +69,8 @@ namespace vabalas_api
             }
 
             app.UseHttpsRedirection();
-
             app.UseAuthorization();
-
-
             app.MapControllers();
-
             app.Run();
         }
     }

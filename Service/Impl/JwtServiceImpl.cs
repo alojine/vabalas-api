@@ -22,9 +22,11 @@ namespace vabalas_api.Service.Impl
                 new Claim(ClaimTypes.Name, user.Email + user.Firstname + user.Lastname)
             };
 
-            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value!));
+            // var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("AppSettings:Token").Value!));
+            var key = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_configuration.GetSection("Authentication:Schemes:Bearer:SigningKeys:0:Value").Value!));
+        
 
-            var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
+        var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256Signature);
 
             var token = new JwtSecurityToken(
                      claims: claims,
