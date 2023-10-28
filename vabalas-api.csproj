@@ -7,9 +7,12 @@
     <RootNamespace>vabalas_api</RootNamespace>
     <UserSecretsId>739a890c-508d-4a03-ad82-95ac47283b5c</UserSecretsId>
 
+
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="Automapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="BCrypt.Net-Next" Version="4.0.3" />
     <PackageReference Include="DotNetEnv" Version="2.5.0" />
     <PackageReference Include="Microsoft.AspNetCore.Authentication.JwtBearer" Version="7.0.11" />
@@ -26,6 +29,7 @@
       <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
     </PackageReference>
     <PackageReference Include="Portable.BouncyCastle" Version="1.9.0" />
+    <PackageReference Include="Riok.Mapperly" Version="3.2.0" />
     <PackageReference Include="Swashbuckle.AspNetCore" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.Filters" Version="7.0.11" />
     <PackageReference Include="Swashbuckle" Version="5.6.0" />
@@ -34,9 +38,15 @@
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
   </ItemGroup>
 
+<<<<<<< HEAD
   <ItemGroup>
     <Folder Include="Exceptions\" />
     <Folder Include="Mappers\" />
   </ItemGroup>
 
+=======
+>>>>>>> 070883fee408d0150a3a679d3689aa606705c2f0
+    <PackageReference Include="Automapper" Version="12.0.1" />
+    <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
+    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
 </Project>

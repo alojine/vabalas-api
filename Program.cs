@@ -4,10 +4,8 @@ using vabalas_api.Repositories;
 using vabalas_api.Repositories.Impl;
 using vabalas_api.Service;
 using vabalas_api.Service.Impl;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using Swashbuckle.AspNetCore.Swagger;
 
 
 namespace vabalas_api
@@ -40,12 +38,13 @@ namespace vabalas_api
                 options.UseSqlServer(builder.Configuration.GetConnectionString("DefaultConnection"));
             });
             builder.Services.AddEndpointsApiExplorer();
+            builder.Services.AddAutoMapper(typeof(Program).Assembly);
 
             // repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
 
             // actual services
-            builder.Services.AddScoped<JwtService, JwtServiceImpl>();
+            builder.Services.AddScoped<IJwtService, JwtService>();
 
             // Authentication
             builder.Services.AddAuthentication().AddJwtBearer();
