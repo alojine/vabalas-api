@@ -1,4 +1,4 @@
-﻿using System.Net.Http.Headers;
+﻿using vabalas_api.Exceptions;
 using vabalas_api.Models;
 
 namespace vabalas_api.Repositories.Impl
@@ -12,19 +12,30 @@ namespace vabalas_api.Repositories.Impl
             _context = context;
         }
 
-        public async Task<IEnumerable<User>> GetAll()
+        public async Task<List<User>> GetAll()
         {
             return await _context.Users.ToListAsync();
         }
 
         public async Task<User> GetById(int userId)
         {
-            return await _context.Users.FindAsync(userId);
+            var user =  await _context.Users.FindAsync(userId);
+            if (user == null)
+            {
+                throw new NotFoundException($"User with id: {userId} is not found.");
+            }
+            return user;
         }
 
         public async Task<User> GetByEmail(string email)
         {
-            return await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+            if (user == null)
+            {
+                throw new NotFoundException($"User with email: {email} is not found.");
+            }
+
+            return user;
         }
 
         public async Task<User> Add(User user)
@@ -46,10 +57,8 @@ namespace vabalas_api.Repositories.Impl
             var user = await _context.Users.FindAsync(userId);
             if (user != null)
             {
-                // make custom vabalas errors
-                return false;
+                throw new NotFoundException($"User with id: {userId} is not found.");
             }
-
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return true;

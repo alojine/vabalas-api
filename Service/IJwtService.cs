@@ -2,7 +2,7 @@
 
 namespace vabalas_api.Service
 {
-    public interface JwtService
+    public interface IJwtService
     {
         string CreateToken(User user);
     }

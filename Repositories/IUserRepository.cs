@@ -4,7 +4,7 @@ namespace vabalas_api.Repositories
 {
     public interface IUserRepository
     {
-        Task<IEnumerable<User>> GetAll();
+        Task<List<User>> GetAll();
 
         Task<User> GetById(int userId);
 
