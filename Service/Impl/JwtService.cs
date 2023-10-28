@@ -6,11 +6,11 @@ using vabalas_api.Models;
 
 namespace vabalas_api.Service.Impl
 {
-    public class JwtServiceImpl : JwtService
+    public class JwtService : IJwtService
     {
         private readonly IConfiguration _configuration;
 
-        public JwtServiceImpl(IConfiguration configuration)
+        public JwtService(IConfiguration configuration)
         {
             _configuration = configuration;
         }
