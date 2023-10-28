@@ -9,10 +9,12 @@ namespace vabalas_api.Controllers
     public class JobController : ControllerBase
     {
         private readonly IJobRepository _jobRepository;
+        
         public JobController(IJobRepository jobRepository)
         {
             _jobRepository = jobRepository;
         }
+        
         [HttpGet]
         public async Task<IActionResult> GetAllJobs()
         {

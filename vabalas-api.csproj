@@ -36,17 +36,8 @@
     <PackageReference Include="Swashbuckle.AspNetCore.Swagger" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerGen" Version="6.5.0" />
     <PackageReference Include="Swashbuckle.AspNetCore.SwaggerUI" Version="6.5.0" />
-  </ItemGroup>
-
-<<<<<<< HEAD
-  <ItemGroup>
-    <Folder Include="Exceptions\" />
-    <Folder Include="Mappers\" />
-  </ItemGroup>
-
-=======
->>>>>>> 070883fee408d0150a3a679d3689aa606705c2f0
     <PackageReference Include="Automapper" Version="12.0.1" />
     <PackageReference Include="AutoMapper.Extensions.Microsoft.DependencyInjection" Version="12.0.1" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
+  </ItemGroup>
 </Project>
