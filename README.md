@@ -1,6 +1,6 @@
 # VABALAS-API
 
-![zamzamzam.png](..%2F..%2F..%2FUsers%2Fbenas%2FOneDrive%2FDesktop%2Fzamzamzam.png)
+![zamzamzam.png](/Readme/OggyAndTheCockroaches.png)
 
 # Overview
 #### Vabalas-api is a backend api project made with asp.net core and c#. Vabalas enables users to share their job offerings to other users within the platform.
