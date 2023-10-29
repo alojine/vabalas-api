@@ -1,4 +1,5 @@
-﻿using vabalas_api.Exceptions;
+﻿using vabalas_api.Enums;
+using vabalas_api.Exceptions;
 using vabalas_api.Models;
 
 namespace vabalas_api.Repositories.Impl
@@ -51,6 +52,11 @@ namespace vabalas_api.Repositories.Impl
             _context.Job.Remove(job);
             await _context.SaveChangesAsync();
             return true;
+        }
+
+        public async Task<List<Job>> GetAllByCategory(JobCategory jobCategory)
+        {
+            return await _context.Job.Where(j => j.Category == jobCategory).ToListAsync();
         }
     }
 }

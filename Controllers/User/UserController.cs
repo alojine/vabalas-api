@@ -26,7 +26,7 @@ namespace vabalas_api.Controllers.User
         {
             var users = await _userRepository.GetAll();
             var userDtos = users.Select(user => _mapper.Map<UserDto>(user));
-            return Ok(userDtos);        
+            return Ok(userDtos);    
         }
     }
 }

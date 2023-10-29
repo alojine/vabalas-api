@@ -1,11 +1,5 @@
-﻿using BCrypt.Net;
-using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
-using Org.BouncyCastle.Crypto.Generators;
+﻿using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Controllers.Auth.Dtos;
-using vabalas_api.Models;
-using vabalas_api.Repositories;
 using vabalas_api.Service;
 
 namespace vabalas_api.Controllers.Auth
@@ -14,36 +8,26 @@ namespace vabalas_api.Controllers.Auth
     [ApiController]
     public class AuthController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
         private readonly IJwtService _jwtService;
+        private readonly IUserService _userService;
 
-        public AuthController(IUserRepository userRepository, IJwtService jwtService)
+        public AuthController(IJwtService jwtService, IUserService userService)
         {
-            _userRepository = userRepository;
             _jwtService = jwtService;
+            _userService = userService;
         }
 
         [HttpPost("register")]
         public async Task<ActionResult<Models.User>> Register(UserRegisterDto userDto)
         {
-            string passwordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
-            var user = new Models.User();
 
-            user.Firstname = userDto.Firstname;
-            user.Lastname = userDto.Lastname;
-            user.Email = userDto.Email;
-            user.PasswordHash = passwordHash;
-            user.createdAt = DateTime.UtcNow;
-            user.updatedAt = DateTime.UtcNow;
-
-
-            return Ok(await _userRepository.Add(user));
+            return Ok(await _userService.Register(userDto));
         }
 
         [HttpPost("login")]
         public async Task<ActionResult<Models.User>> Login(UserLoginDto userDto)
         {
-            var user = await _userRepository.GetByEmail(userDto.Email);
+            var user = await _userService.GetByEmail(userDto.Email);
 
             if (user.Email != userDto.Email)
             {

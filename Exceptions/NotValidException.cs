@@ -1,6 +1,6 @@
 ﻿namespace vabalas_api.Exceptions
 {
-    public class NotValidException : Exception 
+    public class NotValidException : Exception
     {
         public NotValidException() { }
 
