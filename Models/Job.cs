@@ -11,7 +11,7 @@ namespace vabalas_api.Models
         public JobCategory Category { get; set; }   
         public decimal Price { get; set; }
         public string PhoneNumber { get; set; }
-        public DateTime createdAr { get; set; }
-        public DateTime updatedAr { get; set; }
+        public DateTime createdAt { get; set; }
+        public DateTime updatedAt { get; set; }
     }
 }

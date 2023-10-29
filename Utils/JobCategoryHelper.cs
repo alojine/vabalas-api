@@ -11,11 +11,10 @@ namespace vabalas_api.Utils
 
             foreach (JobCategory jobCategory in Enum.GetValues(typeof(JobCategory)))
             {
-             
+                Console.WriteLine(jobCategory);
                 if(category == jobCategory.ToString())
                 {
                     return jobCategory;
-
                 }
             }
             return JobCategory.OTHER;

@@ -5,6 +5,15 @@ namespace vabalas_api.Service
 {
     public interface IJobService
     {
-        Task<Job> AddJob(JobAddDto jobDto);
+        Task<Job> Add(JobAddDto jobDto);
+
+        Task<IEnumerable<Job>> FindAll();
+
+        Task<bool> Delete(int jobId);
+
+        Task<List<Job>> GetAllByUserId(int userId);
+
+        Task<Job> Update(JobUpdateDto jobUpdateDto);
+
     }
 }
