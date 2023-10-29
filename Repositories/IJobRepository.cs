@@ -1,4 +1,5 @@
-﻿using vabalas_api.Models;
+﻿using vabalas_api.Enums;
+using vabalas_api.Models;
 
 namespace vabalas_api.Repositories
 {
@@ -15,5 +16,7 @@ namespace vabalas_api.Repositories
         Task<Job> Update(Job job);
         
         Task<bool> Delete(Job job);
+
+        Task<List<Job>> GetAllByCategory(JobCategory jobCategory);
     }
 }
