@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using AutoMapper;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Controllers.Auth.Dtos;
 using vabalas_api.Controllers.Job.Dtos;
@@ -17,15 +18,18 @@ namespace vabalas_api.Controllers
     {
         private readonly IJobService _jobService;
 
-        public JobController(IJobService jobService)
+        private readonly IMapper _jobMapper;
+
+        public JobController(IJobService jobService, IMapper jobMapper)
         {
             _jobService = jobService;
+            _jobMapper = jobMapper;
         }
         
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(_jobService.FindAll());
+            return Ok(await _jobService.FindAll());
         }
 
         [HttpPost]
@@ -41,7 +45,7 @@ namespace vabalas_api.Controllers
         }
 
         [HttpGet("/{userId}")]
-        public async Task<ActionResult<Models.Job>> getJobById(int userId)
+        public async Task<ActionResult<List<Models.Job>>> getJobById(int userId)
         {
             return Ok(await _jobService.GetAllByUserId(userId));
         }

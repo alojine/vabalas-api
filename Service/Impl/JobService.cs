@@ -62,12 +62,14 @@ namespace vabalas_api.Service.Impl
 
         public async Task<Job> Update(JobUpdateDto jobUpdateDto)
         {
-            var job = new Job();
+            var job = await _jobRepository.GetById(jobUpdateDto.Id);
             
             job.Title = jobUpdateDto.Title;
             job.Description = jobUpdateDto.Description;
             job.PhoneNumber = jobUpdateDto.PhoneNumber;
+            job.User = await _userRepository.GetById(jobUpdateDto.UserId);
             job.Price = jobUpdateDto.Price;
+            job.Category = JobCategoryHelper.ParseToEnum(jobUpdateDto.Category);
             job.updatedAt = DateTime.UtcNow;
 
             return await _jobRepository.Update(job);

@@ -49,6 +49,7 @@ namespace vabalas_api.Repositories.Impl
         public async Task<bool> Delete(Job job)
         {
             _context.Job.Remove(job);
+            await _context.SaveChangesAsync();
             return true;
         }
     }
