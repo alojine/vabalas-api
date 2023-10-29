@@ -32,6 +32,18 @@ namespace vabalas_api.Controllers
             return Ok(await _jobService.FindAll());
         }
 
+        [HttpGet("/user/{userId}")]
+        public async Task<ActionResult<List<Models.Job>>> getJobById(int userId)
+        {
+            return Ok(await _jobService.GetAllByUserId(userId));
+        }
+
+        [HttpGet("/category/{category}")]
+        public async Task<ActionResult<List<Models.Job>>> getJobByCategory(string category)
+        {
+            return Ok(await _jobService.FilterByCategory(category));
+        }
+
         [HttpPost]
         public async Task<ActionResult<Models.Job>> add(JobAddDto jobDto)
         {
@@ -44,16 +56,6 @@ namespace vabalas_api.Controllers
             return Ok(await _jobService.Delete(jobId));
         }
 
-        [HttpGet("/{userId}")]
-        public async Task<ActionResult<List<Models.Job>>> getJobById(int userId)
-        {
-            return Ok(await _jobService.GetAllByUserId(userId));
-        }
-        [HttpGet]
-        public async Task<ActionResult<List<Models.Job>>> getJobByCategory(string category)
-        {
-            return Ok(await _jobService.FilterByCategory(category));
-        }
 
         [HttpPut]
         public async Task<ActionResult<Models.Job>> updateJob(JobUpdateDto jobDto)
