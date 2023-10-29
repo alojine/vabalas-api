@@ -38,9 +38,17 @@ public class StatisticsService : IStatisticsService
         foreach (JobCategory category in Enum.GetValues(typeof(JobCategory)))
         {
             var categoryDistributionDto = new CategoryDistributionDto();
-            var currentCategoryJobs = (await _jobRepository.GetAllByCategory(category)).Count;
             categoryDistributionDto.JobCategory = category;
-            categoryDistributionDto.Percentage = PercentageHelper.GetPercentage(totalJobs, currentCategoryJobs);
+            
+            var currentCategoryJobs = (await _jobRepository.GetAllByCategory(category)).Count;
+            if (currentCategoryJobs != 0)
+            {
+                categoryDistributionDto.Percentage = PercentageHelper.GetPercentage(totalJobs, currentCategoryJobs);
+            }
+            else
+            {
+                categoryDistributionDto.Percentage = 0;
+            }
             
             categoryDistributionList.Add(categoryDistributionDto);
         }

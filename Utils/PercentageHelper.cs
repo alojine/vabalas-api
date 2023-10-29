@@ -2,12 +2,13 @@
 
 public static class PercentageHelper
 {
-    public static decimal GetPercentage(int unit, int divisor)
+    public static decimal GetPercentage(int total, int by)
     {
-        if (divisor == 0)
+        if (total == 0)
         {
-            throw new ArgumentException($"Divisor {divisor} cannot be zero.");
+            throw new ArgumentException($"Divisor {total} cannot be zero.");
         }
-        return Math.Round(((decimal)unit / divisor) * 100, 2);
+        var percentage = ((decimal)by / total) * 100;
+        return Math.Round(percentage, 2);
     }
 }
