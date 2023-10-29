@@ -74,5 +74,9 @@ namespace vabalas_api.Service.Impl
 
             return await _jobRepository.Update(job);
         }
+        public async Task<List<Job>> FilterByCategory(string category)
+        {
+            return await _jobRepository.FilterJobByCategory(category);
+        }
     }
 }

@@ -13,7 +13,7 @@ namespace vabalas_api.Repositories
         Task<Job> Add(Job job);
 
         Task<Job> Update(Job job);
-        
+        Task<List<Job>> FilterJobByCategory(string category);
         Task<bool> Delete(Job job);
     }
 }

@@ -1,5 +1,7 @@
-﻿using vabalas_api.Exceptions;
+﻿using vabalas_api.Controllers.Job.Dtos;
+using vabalas_api.Exceptions;
 using vabalas_api.Models;
+using vabalas_api.Utils;
 
 namespace vabalas_api.Repositories.Impl
 {
@@ -31,7 +33,13 @@ namespace vabalas_api.Repositories.Impl
         {
             return await _context.Job.Where(j => j.User == user).ToListAsync();
         }
-            
+
+        public async Task<List<Job>> FilterJobByCategory(string category)
+        {
+            return await _context.Job.Where(j => j.Category == JobCategoryHelper.ParseToEnum(category)).ToListAsync();
+        }
+
+
         public async Task<Job> Add(Job job)
         {
             _context.Job.Add(job);

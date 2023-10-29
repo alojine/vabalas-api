@@ -12,6 +12,7 @@ namespace vabalas_api.Service
         Task<bool> Delete(int jobId);
 
         Task<List<Job>> GetAllByUserId(int userId);
+        Task<List<Job>> FilterByCategory(string category);
 
         Task<Job> Update(JobUpdateDto jobUpdateDto);
 
