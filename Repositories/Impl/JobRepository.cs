@@ -53,7 +53,7 @@ namespace vabalas_api.Repositories.Impl
         public async Task<bool> Delete(int jobId)
         {
             var job = await _context.Job.FindAsync(jobId);
-            if (job != null)
+            if (job == null)
             {
                 throw new NotFoundException($"Job with id: {jobId} was not found.");
             }

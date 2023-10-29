@@ -42,5 +42,36 @@ namespace vabalas_api.Controllers
             job.User = user;
             return Ok(await _jobRepository.Add(job));
         }
+
+        [HttpGet("deleteJob")]
+        public async Task<ActionResult<Models.Job>> deleteJob(int jobId)
+        {
+            var job = await _jobRepository.Delete(jobId);
+            return Ok(job);
+        }
+
+        [HttpPost("getUserJobs")]
+        public async Task<ActionResult<Models.Job>> getUserJob(int userId)
+        {
+            var user = await _userRepository.GetById(userId);
+            var job = await _jobRepository.GetJobsByUserId(user);
+
+            return Ok(job);
+        }
+
+        [HttpPost("updateJob")]//todo
+        public async Task<ActionResult<Models.Job>> updateJob(JobUpdateDto jobDto)
+        {
+
+            var job = new Models.Job();
+
+            job.Title = jobDto.Title;
+            job.Description = jobDto.Description;
+            job.PhoneNumber = jobDto.PhoneNumber;
+            job.Price = jobDto.Price;
+            job.updatedAr = DateTime.UtcNow;
+
+            return Ok(await _jobRepository.Update(job));
+        }
     }
 }
