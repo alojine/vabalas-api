@@ -3,8 +3,10 @@ using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Controllers.Auth.Dtos;
 using vabalas_api.Controllers.Job.Dtos;
 using vabalas_api.Controllers.User;
+using vabalas_api.Enums;
 using vabalas_api.Repositories;
 using vabalas_api.Repositories.Impl;
+using vabalas_api.Service;
 
 namespace vabalas_api.Controllers
 {
@@ -14,11 +16,13 @@ namespace vabalas_api.Controllers
     {
         private readonly IJobRepository _jobRepository;
         private readonly IUserRepository _userRepository;
+        private readonly IJobService _jobService;
 
-        public JobController(IJobRepository jobRepository,IUserRepository userRepository)
+        public JobController(IJobRepository jobRepository,IUserRepository userRepository, IJobService jobService)
         {
             _jobRepository = jobRepository;
             _userRepository = userRepository;
+            _jobService = jobService;
         }
         
         [HttpGet]
@@ -31,16 +35,7 @@ namespace vabalas_api.Controllers
         [HttpPost("addJob")]
         public async Task<ActionResult<Models.Job>> addJob(JobAddDto jobDto)
         {
-            var user = await _userRepository.GetById(jobDto.UserId);
-            var job = new Models.Job();
-            job.Title = jobDto.Title;
-            job.Description = jobDto.Description;
-            job.PhoneNumber = jobDto.PhoneNumber;
-            job.Price = jobDto.Price;
-            job.createdAr = DateTime.UtcNow;
-            job.updatedAr = DateTime.UtcNow;
-            job.User = user;
-            return Ok(await _jobRepository.Add(job));
+            return Ok(await _jobService.AddJob(jobDto)) ;
         }
 
         [HttpGet("deleteJob")]

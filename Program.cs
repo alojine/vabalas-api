@@ -46,6 +46,7 @@ namespace vabalas_api
 
             // actual services
             builder.Services.AddScoped<IJwtService, JwtService>();
+            builder.Services.AddScoped<IJobService, JobService>();
 
             // Authentication
             builder.Services.AddAuthentication().AddJwtBearer();

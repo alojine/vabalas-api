@@ -1,4 +1,6 @@
-﻿namespace vabalas_api.Models
+﻿using vabalas_api.Enums;
+
+namespace vabalas_api.Models
 {
     public class Job
     {
@@ -6,6 +8,7 @@
         public User User { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
+        public JobCategory Category { get; set; }   
         public decimal Price { get; set; }
         public string PhoneNumber { get; set; }
         public DateTime createdAr { get; set; }
