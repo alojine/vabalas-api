@@ -27,15 +27,9 @@ namespace vabalas_api.Repositories.Impl
             return job;
         }
 
-        public async Task<List<Job>> GetJobsByUserId(User user)
+        public async Task<List<Job>> GetAllByUserId(User user)
         {
-            var jobs = await _context.Job.Where(j => j.User == user).ToListAsync();
-            if (jobs == null)
-            {
-                throw new NotFoundException($"Jobs for user {user.Id} were not found");
-            }
-
-            return jobs;
+            return await _context.Job.Where(j => j.User == user).ToListAsync();
         }
             
         public async Task<Job> Add(Job job)
@@ -44,21 +38,17 @@ namespace vabalas_api.Repositories.Impl
             await _context.SaveChangesAsync();
             return job;
         }
+        
         public async Task<Job> Update(Job job)
         {
             _context.Job.Update(job);
             await _context.SaveChangesAsync();
             return job;
         }
-        public async Task<bool> Delete(int jobId)
+        
+        public async Task<bool> Delete(Job job)
         {
-            var job = await _context.Job.FindAsync(jobId);
-            if (job == null)
-            {
-                throw new NotFoundException($"Job with id: {jobId} was not found.");
-            }
             _context.Job.Remove(job);
-            await _context.SaveChangesAsync();
             return true;
         }
     }

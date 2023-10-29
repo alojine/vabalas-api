@@ -6,12 +6,14 @@ namespace vabalas_api.Repositories
     {
         Task<IEnumerable<Job>> GetAll();
 
-        Task<List<Job>> GetJobsByUserId(User user);
+        Task<List<Job>> GetAllByUserId(User user);
+        
         Task<Job> GetById(int jobId);
 
         Task<Job> Add(Job job);
 
         Task<Job> Update(Job job);
-        Task<bool> Delete(int jobId);
+        
+        Task<bool> Delete(Job job);
     }
 }

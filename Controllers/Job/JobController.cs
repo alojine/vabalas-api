@@ -7,6 +7,7 @@ using vabalas_api.Enums;
 using vabalas_api.Repositories;
 using vabalas_api.Repositories.Impl;
 using vabalas_api.Service;
+using vabalas_api.Models;
 
 namespace vabalas_api.Controllers
 {
@@ -14,59 +15,41 @@ namespace vabalas_api.Controllers
     [ApiController]
     public class JobController : ControllerBase
     {
-        private readonly IJobRepository _jobRepository;
-        private readonly IUserRepository _userRepository;
         private readonly IJobService _jobService;
 
-        public JobController(IJobRepository jobRepository,IUserRepository userRepository, IJobService jobService)
+        public JobController(IJobService jobService)
         {
-            _jobRepository = jobRepository;
-            _userRepository = userRepository;
             _jobService = jobService;
         }
         
         [HttpGet]
-        public async Task<IActionResult> GetAllJobs()
+        public async Task<IActionResult> GetAll()
         {
-            var job = await _jobRepository.GetAll();
-            return Ok(job);
+            return Ok(_jobService.FindAll());
         }
 
-        [HttpPost("addJob")]
-        public async Task<ActionResult<Models.Job>> addJob(JobAddDto jobDto)
+        [HttpPost]
+        public async Task<ActionResult<Models.Job>> add(JobAddDto jobDto)
         {
-            return Ok(await _jobService.AddJob(jobDto)) ;
+            return Ok(await _jobService.Add(jobDto));
         }
 
-        [HttpGet("deleteJob")]
-        public async Task<ActionResult<Models.Job>> deleteJob(int jobId)
+        [HttpDelete("/{jobId}")]
+        public async Task<ActionResult<Models.Job>> delete(int jobId)
         {
-            var job = await _jobRepository.Delete(jobId);
-            return Ok(job);
+            return Ok(await _jobService.Delete(jobId));
         }
 
-        [HttpPost("getUserJobs")]
-        public async Task<ActionResult<Models.Job>> getUserJob(int userId)
+        [HttpGet("/{userId}")]
+        public async Task<ActionResult<Models.Job>> getJobById(int userId)
         {
-            var user = await _userRepository.GetById(userId);
-            var job = await _jobRepository.GetJobsByUserId(user);
-
-            return Ok(job);
+            return Ok(await _jobService.GetAllByUserId(userId));
         }
 
-        [HttpPost("updateJob")]//todo
+        [HttpPut]
         public async Task<ActionResult<Models.Job>> updateJob(JobUpdateDto jobDto)
         {
-
-            var job = new Models.Job();
-
-            job.Title = jobDto.Title;
-            job.Description = jobDto.Description;
-            job.PhoneNumber = jobDto.PhoneNumber;
-            job.Price = jobDto.Price;
-            job.updatedAr = DateTime.UtcNow;
-
-            return Ok(await _jobRepository.Update(job));
+            return Ok(await _jobService.Update(jobDto));
         }
     }
 }
