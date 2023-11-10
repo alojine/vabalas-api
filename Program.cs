@@ -43,12 +43,14 @@ namespace vabalas_api
             // repositories
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IJobRepository, JobRepository>();
+            builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
 
             // services
             builder.Services.AddScoped<IJwtService, JwtService>();
             builder.Services.AddScoped<IJobService, JobService>();
             builder.Services.AddScoped<IStatisticsService, StatisticsService>();
             builder.Services.AddScoped<IUserService,UserService>();
+            builder.Services.AddScoped<IReviewService,ReviewSevice>();  
 
             // Authentication
             builder.Services.AddAuthentication().AddJwtBearer();
