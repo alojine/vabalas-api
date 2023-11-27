@@ -17,14 +17,14 @@ namespace vabalas_api.Controllers.Auth
             _userService = userService;
         }
 
-        [HttpPost("register")]
+        [HttpPost("/register")]
         public async Task<ActionResult<Models.User>> Register(UserRegisterDto userDto)
         {
 
             return Ok(await _userService.Register(userDto));
         }
 
-        [HttpPost("login")]
+        [HttpPost("/login")]
         public async Task<ActionResult<Models.User>> Login(UserLoginDto userDto)
         {
             var user = await _userService.GetByEmail(userDto.Email);
