@@ -28,7 +28,7 @@ namespace vabalas_api.Controllers.JobOffer
             return Ok(await _jobOfferService.GetAllByUserAndStatus(status.userId,status.Status));
         }
 
-        [HttpGet("offer/{offerId}")]
+        [HttpGet("{offerId}")]
         public async Task<IActionResult> GetById(int offerId)
         {
             return Ok(await _jobOfferService.GetById(offerId));
@@ -39,7 +39,7 @@ namespace vabalas_api.Controllers.JobOffer
         {
             return Ok(await _jobOfferService.Add(offerDto));
         }
-        [HttpDelete("offer/{offerId}")]
+        [HttpDelete("{offerId}")]
         public async Task<ActionResult<Models.JobOffer>> delete(int offerId)
         {
             return Ok(await _jobOfferService.Delete(offerId));
