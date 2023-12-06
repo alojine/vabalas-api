@@ -11,5 +11,6 @@ namespace vabalas_api.Data
 
         public DbSet<Job> Job { get; set; }
         public DbSet<Review> Reviews { get; set; }
+        public DbSet<JobOffer> JobOffers { get; set; }
     }
 }
