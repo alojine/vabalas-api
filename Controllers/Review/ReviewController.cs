@@ -29,7 +29,7 @@ namespace vabalas_api.Controllers.Review
         {
             return Ok(await _reviewService.Add(reviewDto));
         }
-        [HttpDelete("/{reviewId}")]
+        [HttpDelete("/review/{reviewId}")]
         public async Task<ActionResult<Models.Review>> delete(int reviewId)
         {
             return Ok(await _reviewService.Delete(reviewId));
