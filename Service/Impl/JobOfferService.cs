@@ -11,12 +11,14 @@ namespace vabalas_api.Service.Impl
     public class JobOfferService : IJobOfferService
     {
         private readonly IJobOfferRepository _offerRepository;
+        private readonly IUserRepository _userRepository;
         private readonly IJobRepository _jobRepository;
 
-        public JobOfferService(IJobOfferRepository repository,IJobRepository jobRepository)
+        public JobOfferService(IJobOfferRepository repository,IJobRepository jobRepository, IUserRepository userRepository)
         {
             _jobRepository = jobRepository;
             _offerRepository = repository;
+            _userRepository = userRepository;
         }
         public async Task<JobOffer> Add(JobOfferDto offerDto)
         {
@@ -36,6 +38,11 @@ namespace vabalas_api.Service.Impl
         public async Task<IEnumerable<JobOffer>> FindAll()
         {
             return await _offerRepository.GetAll();
+        }
+        public async Task<IEnumerable<JobOffer>> GetAllByUserAndStatus(int userId,string status)
+        {
+            var user = await _userRepository.GetById(userId);
+            return await _offerRepository.GetAllByUserIdAndStatus(user, status);
         }
         public async Task<JobOffer> GetById(int offerId)
         {
@@ -64,6 +71,11 @@ namespace vabalas_api.Service.Impl
 
             return await _offerRepository.Update(offer);
 
+        }
+        public async Task<List<JobOffer>> GetAllByUserId(int userId)
+        {
+            var user = await _userRepository.GetById(userId);
+            return await _offerRepository.GetAllByUserId(user);
         }
 
     }

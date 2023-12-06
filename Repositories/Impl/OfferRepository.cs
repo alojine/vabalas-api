@@ -1,4 +1,5 @@
-﻿using vabalas_api.Exceptions;
+﻿using vabalas_api.Enums;
+using vabalas_api.Exceptions;
 using vabalas_api.Models;
 
 namespace vabalas_api.Repositories.Impl
@@ -42,6 +43,14 @@ namespace vabalas_api.Repositories.Impl
                 throw new NotFoundException($"Offer with id: {offerId} was not found.");
             }
             return jobOffer;
+        }
+        public async Task<List<JobOffer>> GetAllByUserId(User user)
+        {
+            return await _context.JobOffers.Where(j => j.Job.User == user).ToListAsync();
+        }
+        public async Task<List<JobOffer>> GetAllByUserIdAndStatus(User user, string status)
+        {
+            return await _context.JobOffers.Where(j => (j.Job.User == user) && (j.Status == status)).ToListAsync();
         }
     }
 }

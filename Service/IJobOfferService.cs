@@ -10,6 +10,8 @@ namespace vabalas_api.Service
         Task<bool> Delete(int offerId);
         Task<JobOffer> GetById(int offerId);
         Task<JobOffer> Update(JobOfferDto offerDto);
+        Task<IEnumerable<JobOffer>> GetAllByUserAndStatus(int userId, string status);
+        Task<List<JobOffer>> GetAllByUserId(int userId);
 
     }
 }

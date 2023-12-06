@@ -22,6 +22,12 @@ namespace vabalas_api.Controllers.JobOffer
         {
             return Ok(await _jobOfferService.FindAll());
         }
+        [HttpPost("status/")]
+        public async Task<IActionResult> GetByStatus(UserStatusDto status)
+        {
+            return Ok(await _jobOfferService.GetAllByUserAndStatus(status.userId,status.Status));
+        }
+
         [HttpGet("offer/{offerId}")]
         public async Task<IActionResult> GetById(int offerId)
         {
@@ -42,6 +48,11 @@ namespace vabalas_api.Controllers.JobOffer
         public async Task<ActionResult<Models.JobOffer>> updateJobOffer(JobOfferDto offerDto)
         {
             return Ok(await _jobOfferService.Update(offerDto));
+        }
+        [HttpGet("worker/{userId}")]
+        public async Task<ActionResult<List<Models.Job>>> getJobById(int userId)
+        {
+            return Ok(await _jobOfferService.GetAllByUserId(userId));
         }
     }
 }
