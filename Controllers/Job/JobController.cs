@@ -51,7 +51,7 @@ namespace vabalas_api.Controllers
         }
 
         [HttpPut]
-        public async Task<ActionResult<Models.Job>> updateJob(JobUpdateDto jobDto)
+        public async Task<ActionResult<Models.Job>> UpdateJob(JobUpdateDto jobDto)
         {
             return Ok(await _jobService.Update(jobDto));
         }

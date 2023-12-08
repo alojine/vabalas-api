@@ -52,13 +52,8 @@ namespace vabalas_api.Repositories.Impl
             return user;
         }
 
-        public async Task<bool> Delete(int userId)
+        public async Task<bool> Delete(User user)
         {
-            var user = await _context.Users.FindAsync(userId);
-            if (user != null)
-            {
-                throw new NotFoundException($"User with id: {userId} is not found.");
-            }
             _context.Users.Remove(user);
             await _context.SaveChangesAsync();
             return true;

@@ -4,12 +4,12 @@ namespace vabalas_api.Controllers.Job.Dtos
     public class JobUpdateDto
     {
         public int Id { get; set; }
-        public string Title { get; set; } = string.Empty;
-        public string Description { get; set; } = string.Empty;
+        public string Title { get; set; }
+        public string Description { get; set; }
         public int UserId { get; set; } 
-        public string Category { get; set; } = string.Empty;
+        public string Category { get; set; }
         public decimal Price {  get; set; }
-        public string PhoneNumber { get; set; } = string.Empty;
+        public string PhoneNumber { get; set; }
 
     }
 }

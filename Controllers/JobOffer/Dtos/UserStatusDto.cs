@@ -2,7 +2,7 @@
 {
     public class UserStatusDto
     {
-        public string Status { get; set; } = string.Empty;
+        public string Status { get; set; }
         public int userId { get; set; }
     }
 }
