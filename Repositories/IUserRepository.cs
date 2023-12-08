@@ -14,6 +14,6 @@ namespace vabalas_api.Repositories
 
         Task<User> Update(User user);
 
-        Task<bool> Delete(int userId);
+        Task<bool> Delete(User user);
     }
 }

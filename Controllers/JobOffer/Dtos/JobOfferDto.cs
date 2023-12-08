@@ -6,8 +6,8 @@
         public string CustomerName { get; set; }
         public string CustomerPhoneNumber { get; set; }
         public int jobId { get; set; }
-        public string Status { get; set; } = string.Empty;
-        public string Note {  get; set; } = string.Empty;
+        public string Status { get; set; }
+        public string Note {  get; set; }
         public DateTime JobDate { get; set; } 
 
     }

@@ -1,4 +1,6 @@
-﻿using vabalas_api.Controllers.Auth.Dtos;
+﻿using Microsoft.AspNetCore.Http.HttpResults;
+using vabalas_api.Controllers.Auth.Dtos;
+using vabalas_api.Controllers.User;
 using vabalas_api.Models;
 using vabalas_api.Repositories;
 
@@ -29,8 +31,36 @@ public class UserService : IUserService
         return await _userRepository.Add(user);
     }
 
+    public async Task<List<User>> GetAll()
+    {
+        return await _userRepository.GetAll();
+    }
+    
     public async Task<User> GetByEmail(string email)
     {
         return await _userRepository.GetByEmail(email);
+    }
+
+    public async Task<User> GetById(int id)
+    {
+        return await _userRepository.GetById(id);
+    }
+
+    public async Task<User> Update(UserUpdateDto userDto)
+    {
+        var user = await _userRepository.GetById(userDto.Id);
+
+        user.Firstname = userDto.Firstname;
+        user.Lastname = userDto.Lastname;
+        user.updatedAt = DateTime.Now;
+        
+        return await _userRepository.Update(user);
+    }
+
+    public async Task<bool> Delete(int id)
+    {
+        var user = await _userRepository.GetById(id);
+        
+        return await _userRepository.Delete(user);
     }
 }

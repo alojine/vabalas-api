@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Mappers;
 using vabalas_api.Repositories;
+using vabalas_api.Service;
 
 namespace vabalas_api.Controllers.User
 {
@@ -11,22 +12,40 @@ namespace vabalas_api.Controllers.User
     [ApiController]
     public class UserController : ControllerBase
     {
-        private readonly IUserRepository _userRepository;
+        private readonly IUserService _userService;
 
         private readonly IMapper _mapper;
 
-        public UserController(IUserRepository userRepository, IMapper mapper)
+        public UserController(IUserService userService, IMapper mapper)
         {
-            _userRepository = userRepository;
+            _userService = userService;
             _mapper = mapper;
         }
 
         [HttpGet]
         public async Task<IActionResult> GetAllUsers()
         {
-            var users = await _userRepository.GetAll();
+            var users = await _userService.GetAll();
             var userDtos = users.Select(user => _mapper.Map<UserDto>(user));
             return Ok(userDtos);    
+        }
+        
+        [HttpGet("userId")]
+        public async Task<IActionResult> GetById(int userId)
+        {
+            return Ok(_mapper.Map<UserDto>(await _userService.GetById(userId)));
+        }
+
+        [HttpPut]
+        public async Task<IActionResult> Update(UserUpdateDto userDto)
+        {
+            return Ok(_mapper.Map<UserDto>(await _userService.Update(userDto)));
+        }
+
+        [HttpDelete("{userId}")]
+        public async Task<IActionResult> Delete(int userId)
+        {
+            return Ok(_userService.Delete(userId));
         }
     }
 }
