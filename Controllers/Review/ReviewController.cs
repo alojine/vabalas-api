@@ -1,10 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.AspNetCore.Mvc.Routing;
-using vabalas_api.Controllers.Job.Dtos;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Controllers.Review.Dtos;
-using vabalas_api.Models;
 using vabalas_api.Service;
-using vabalas_api.Service.Impl;
 
 namespace vabalas_api.Controllers.Review
 {
@@ -29,12 +26,12 @@ namespace vabalas_api.Controllers.Review
         {
             return Ok(await _reviewService.Add(reviewDto));
         }
-        [HttpDelete("/review/{reviewId}")]
+        [HttpDelete("{reviewId}")]
         public async Task<ActionResult<Models.Review>> delete(int reviewId)
         {
             return Ok(await _reviewService.Delete(reviewId));
         }
-        [HttpGet("/review/{jobId}")]
+        [HttpGet("{jobId}")]
         public async Task<ActionResult<List<Models.Review>>> getReviewById(int jobId)
         {
             return Ok(await _reviewService.GetAllByJobId(jobId));

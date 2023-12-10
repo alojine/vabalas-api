@@ -6,11 +6,8 @@
         public string Firstname { get; set; }
         public string Lastname { get; set; }
         public string Email { get; set; }
-
         public string PasswordHash { get; set; }
-        public DateTime createdAt { get; set; }
-        public DateTime updatedAt { get; set; }
-
-        
+        public DateTime CreatedAt { get; set; }
+        public DateTime UpdatedAt { get; set; }
     }
 }

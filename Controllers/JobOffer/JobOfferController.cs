@@ -1,9 +1,7 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using vabalas_api.Controllers.Job.Dtos;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Controllers.JobOffer.Dtos;
 using vabalas_api.Service;
-using vabalas_api.Service.Impl;
-using vabalas_api.Models;
 
 namespace vabalas_api.Controllers.JobOffer
 {
@@ -35,22 +33,22 @@ namespace vabalas_api.Controllers.JobOffer
         }
 
         [HttpPost]
-        public async Task<ActionResult<Models.JobOffer>> add(JobOfferDto offerDto)
+        public async Task<ActionResult<Models.JobOffer>> Add(JobOfferDto offerDto)
         {
             return Ok(await _jobOfferService.Add(offerDto));
         }
         [HttpDelete("{offerId}")]
-        public async Task<ActionResult<Models.JobOffer>> delete(int offerId)
+        public async Task<ActionResult<Models.JobOffer>> Delete(int offerId)
         {
             return Ok(await _jobOfferService.Delete(offerId));
         }
         [HttpPut]
-        public async Task<ActionResult<Models.JobOffer>> updateJobOffer(JobOfferDto offerDto)
+        public async Task<ActionResult<Models.JobOffer>> UpdateJobOffer(JobOfferDto offerDto)
         {
             return Ok(await _jobOfferService.Update(offerDto));
         }
         [HttpGet("worker/{userId}")]
-        public async Task<ActionResult<List<Models.Job>>> getJobById(int userId)
+        public async Task<ActionResult<List<Models.Job>>> GetJobById(int userId)
         {
             return Ok(await _jobOfferService.GetAllByUserId(userId));
         }

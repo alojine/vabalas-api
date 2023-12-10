@@ -1,6 +1,4 @@
 ﻿
-using vabalas_api.Enums;
-
 namespace vabalas_api.Controllers.Job.Dtos
 {
     public class JobAddDto

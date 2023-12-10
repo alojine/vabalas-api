@@ -3,8 +3,6 @@ using vabalas_api.Enums;
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
 using vabalas_api.Repositories;
-using vabalas_api.Repositories.Impl;
-using vabalas_api.Utils;
 
 namespace vabalas_api.Service.Impl
 {
@@ -28,7 +26,7 @@ namespace vabalas_api.Service.Impl
 
             job.Title = jobDto.Title;
             job.Description = jobDto.Description;
-            job.Category = JobCategoryHelper.ParseToEnum(jobDto.Category);
+            job.Category = JobCatogryParser.ToEnum(jobDto.Category);
             job.PhoneNumber = jobDto.PhoneNumber;
             job.Price = jobDto.Price;
             job.createdAt = DateTime.UtcNow;
@@ -43,6 +41,11 @@ namespace vabalas_api.Service.Impl
             return await _jobRepository.GetAll();
         }
 
+        public async Task<Job> GetById(int jobId)
+        {
+            return await _jobRepository.GetById(jobId);
+        }
+
         public async Task<bool> Delete(int jobId)
         {
             var job = await _jobRepository.GetById(jobId);
@@ -53,7 +56,7 @@ namespace vabalas_api.Service.Impl
             
             return await _jobRepository.Delete(job);
         }
-
+        
         public async Task<List<Job>> GetAllByUserId(int userId)
         {
             var user = await _userRepository.GetById(userId);
@@ -69,7 +72,7 @@ namespace vabalas_api.Service.Impl
             job.PhoneNumber = jobUpdateDto.PhoneNumber;
             job.User = await _userRepository.GetById(jobUpdateDto.UserId);
             job.Price = jobUpdateDto.Price;
-            job.Category = JobCategoryHelper.ParseToEnum(jobUpdateDto.Category);
+            job.Category = JobCatogryParser.ToEnum(jobUpdateDto.Category);
             job.updatedAt = DateTime.UtcNow;
 
             return await _jobRepository.Update(job);
