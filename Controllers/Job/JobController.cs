@@ -1,14 +1,8 @@
 ﻿using AutoMapper;
-using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using vabalas_api.Controllers.Auth.Dtos;
 using vabalas_api.Controllers.Job.Dtos;
-using vabalas_api.Controllers.User;
-using vabalas_api.Enums;
-using vabalas_api.Repositories;
-using vabalas_api.Repositories.Impl;
 using vabalas_api.Service;
-using vabalas_api.Models;
 
 namespace vabalas_api.Controllers
 {
@@ -38,14 +32,20 @@ namespace vabalas_api.Controllers
             return Ok(await _jobService.Add(jobDto));
         }
 
-        [HttpDelete("/{jobId}")]
+        [HttpDelete("{jobId}")]
         public async Task<ActionResult<Models.Job>> delete(int jobId)
         {
             return Ok(await _jobService.Delete(jobId));
         }
+    
+        [HttpGet("{jobId}")]
+        public async Task<ActionResult<Models.Job>> GetById(int jobId)
+        {
+            return Ok(await _jobService.GetById(jobId));
+        }
 
-        [HttpGet("/{userId}")]
-        public async Task<ActionResult<List<Models.Job>>> getJobById(int userId)
+        [HttpGet("user/{userId}")]
+        public async Task<ActionResult<List<Models.Job>>> GetAllByUserId(int userId)
         {
             return Ok(await _jobService.GetAllByUserId(userId));
         }

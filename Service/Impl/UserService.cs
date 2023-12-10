@@ -1,5 +1,4 @@
-﻿using Microsoft.AspNetCore.Http.HttpResults;
-using vabalas_api.Controllers.Auth.Dtos;
+﻿using vabalas_api.Controllers.Auth.Dtos;
 using vabalas_api.Controllers.User;
 using vabalas_api.Models;
 using vabalas_api.Repositories;
@@ -24,8 +23,8 @@ public class UserService : IUserService
             Lastname = userDto.Lastname,
             Email = userDto.Email,
             PasswordHash = passwordHash,
-            createdAt = DateTime.UtcNow,
-            updatedAt = DateTime.UtcNow
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
         return await _userRepository.Add(user);
@@ -52,7 +51,7 @@ public class UserService : IUserService
 
         user.Firstname = userDto.Firstname;
         user.Lastname = userDto.Lastname;
-        user.updatedAt = DateTime.Now;
+        user.UpdatedAt = DateTime.Now;
         
         return await _userRepository.Update(user);
     }

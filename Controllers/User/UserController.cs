@@ -1,9 +1,6 @@
 ﻿using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using vabalas_api.Mappers;
-using vabalas_api.Repositories;
 using vabalas_api.Service;
 
 namespace vabalas_api.Controllers.User
@@ -45,7 +42,7 @@ namespace vabalas_api.Controllers.User
         [HttpDelete("{userId}")]
         public async Task<IActionResult> Delete(int userId)
         {
-            return Ok(_userService.Delete(userId));
+            return Ok(await _userService.Delete(userId));
         }
     }
 }

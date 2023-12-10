@@ -19,7 +19,7 @@ namespace vabalas_api.Repositories.Impl
 
         public async Task<User> GetById(int userId)
         {
-            var user =  await _context.Users.FindAsync(userId);
+            var user = await _context.Users.FindAsync(userId);
             if (user == null)
             {
                 throw new NotFoundException($"User with id: {userId} is not found.");

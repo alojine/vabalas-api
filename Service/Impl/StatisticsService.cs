@@ -1,7 +1,6 @@
 ﻿using vabalas_api.Controllers.Statistics;
 using vabalas_api.Enums;
 using vabalas_api.Repositories;
-using vabalas_api.Repositories.Impl;
 using vabalas_api.Utils;
 
 namespace vabalas_api.Service.Impl;
@@ -26,7 +25,7 @@ public class StatisticsService : IStatisticsService
 
     public async Task<int> GetTotalAmountOfJobsByCategory(string category)
     {
-        JobCategory jobCategory = JobCategoryHelper.ParseToEnum(category);
+        var jobCategory = JobCatogryParser.ToEnum(category);
         var jobs = await _jobRepository.GetAllByCategory(jobCategory);
         return jobs.Count;
     }

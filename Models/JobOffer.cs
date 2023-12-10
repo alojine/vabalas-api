@@ -8,9 +8,10 @@ namespace vabalas_api.Models
         public string CustomerName { get; set; }
         public string CustomerPhoneNumber { get; set; }
         public Job Job { get; set; }
-        public string Status { get; set; }
+        public OfferStatus OfferStatus { get; set; }
         public string Note { get; set; }
-        public DateTime Created { get; set; }
         public DateTime JobDate { get; set; }
+        public DateTime CreatedAt { get; set; }
+        
     }
 }

@@ -2,7 +2,6 @@
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
 using vabalas_api.Repositories;
-using vabalas_api.Repositories.Impl;
 
 namespace vabalas_api.Service.Impl
 {

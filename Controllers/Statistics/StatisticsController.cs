@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Mvc;
+﻿using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Service;
 
 namespace vabalas_api.Controllers.Statistics;
@@ -14,19 +15,19 @@ public class StatisticsController : ControllerBase
         _statisticsService = statisticsService;
     }
     
-    [HttpGet("/total")]
+    [HttpGet("total")]
     public async Task<ActionResult<int>> GetTotalAmountOfJobs()
     {
         return Ok(await _statisticsService.GetTotalAmountOfJobs());
     }
     
-    [HttpGet("/category/{category}")]
+    [HttpGet("category/{category}")]
     public async Task<ActionResult<int>> GetAmountOfJobsByCategory(string category)
     {
         return Ok(await _statisticsService.GetTotalAmountOfJobsByCategory(category));
     }
     
-    [HttpGet("/distribution")]
+    [HttpGet("distribution")]
     public async Task<ActionResult<int>> GetCategoryDistribution()
     {
         return Ok(await _statisticsService.GetCategoryDistribution());

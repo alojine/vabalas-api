@@ -9,6 +9,8 @@ namespace vabalas_api.Service
 
         Task<IEnumerable<Job>> FindAll();
 
+        Task<Job> GetById(int jobId);
+
         Task<bool> Delete(int jobId);
 
         Task<List<Job>> GetAllByUserId(int userId);

@@ -50,7 +50,7 @@ namespace vabalas_api.Repositories.Impl
         }
         public async Task<List<JobOffer>> GetAllByUserIdAndStatus(User user, string status)
         {
-            return await _context.JobOffers.Where(j => (j.Job.User == user) && (j.Status == status)).ToListAsync();
+            return await _context.JobOffers.Where(j => (j.Job.User == user) && (j.OfferStatus == OfferStatusParser.ToEnum(status))).ToListAsync();
         }
     }
 }

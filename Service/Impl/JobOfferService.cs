@@ -3,8 +3,6 @@ using vabalas_api.Enums;
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
 using vabalas_api.Repositories;
-using vabalas_api.Repositories.Impl;
-using vabalas_api.Utils;
 
 namespace vabalas_api.Service.Impl
 {
@@ -23,13 +21,13 @@ namespace vabalas_api.Service.Impl
         public async Task<JobOffer> Add(JobOfferDto offerDto)
         {
             var offer = new JobOffer();
-            var job = await _jobRepository.GetById(offerDto.jobId);
-
+            var job = await _jobRepository.GetById(offerDto.JobId);
+            
             offer.CustomerName = offerDto.CustomerName;
             offer.CustomerPhoneNumber = offerDto.CustomerPhoneNumber;
-            offer.Created = DateTime.UtcNow;
+            offer.CreatedAt = DateTime.UtcNow;
             offer.JobDate = offerDto.JobDate;
-            offer.Status = offerDto.Status;
+            offer.OfferStatus = OfferStatusParser.ToEnum(offerDto.Status);
             offer.Note = offerDto.Note;
             offer.Job = job;
 
@@ -60,12 +58,12 @@ namespace vabalas_api.Service.Impl
         public async Task<JobOffer> Update(JobOfferDto offerDto)
         {
             var offer = await _offerRepository.GetById(offerDto.Id);
-            var job = await _jobRepository.GetById(offerDto.jobId);
+            var job = await _jobRepository.GetById(offerDto.JobId);
 
             offer.CustomerName = offerDto.CustomerName;
             offer.CustomerPhoneNumber = offerDto.CustomerPhoneNumber;
             offer.JobDate = offerDto.JobDate;
-            offer.Status = offerDto.Status;
+            offer.OfferStatus = OfferStatusParser.ToEnum(offerDto.Status);
             offer.Note = offerDto.Note;
             offer.Job = job;
 

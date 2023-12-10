@@ -1,6 +1,4 @@
-﻿using vabalas_api.Enums;
-
-namespace vabalas_api.Models
+﻿namespace vabalas_api.Models
 {
     public class Review
     {
@@ -10,7 +8,8 @@ namespace vabalas_api.Models
         public string Title { get; set; }
         public string Description { get; set; }
 
-        public DateTime createdAt { get; set; }
-        public DateTime updatedAt { get; set; }
+        public DateTime CreatedAt { get; set; }
+        
+        public DateTime UpdatedAt { get; set; }
     }
 }
