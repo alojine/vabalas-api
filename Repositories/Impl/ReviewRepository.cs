@@ -6,10 +6,12 @@ namespace vabalas_api.Repositories.Impl
     public class ReviewRepository : IReviewRepository
     {
         private readonly DataContext _context;
+        
         public ReviewRepository(DataContext context) 
         { 
             _context = context;
         }
+        
         public async Task<IEnumerable<Review>> GetAll()
         {
             return await _context.Reviews.ToListAsync();
@@ -25,10 +27,12 @@ namespace vabalas_api.Repositories.Impl
 
             return review;
         }
-        public async Task<List<Review>> GetAllByJobId(Job job)
+        
+        public async Task<List<Review>> GetAllByJobId(int id)
         {
-            return await _context.Reviews.Where(j => j.Job == job).ToListAsync();
+            return await _context.Reviews.Where(r => r.Job.Id == id).ToListAsync();
         }
+        
         public async Task<Review> Add(Review review)
         {
             _context.Reviews.Add(review);

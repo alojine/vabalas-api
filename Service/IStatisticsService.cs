@@ -1,4 +1,5 @@
 ﻿using vabalas_api.Controllers.Statistics;
+using vabalas_api.Models;
 
 namespace vabalas_api.Service;
 
@@ -9,4 +10,6 @@ public interface IStatisticsService
     Task<int> GetTotalAmountOfJobsByCategory(string category);
 
     Task<List<CategoryDistributionDto>> GetCategoryDistribution();
+
+    Task<List<Job>> GetBestRatedJobs();
 }

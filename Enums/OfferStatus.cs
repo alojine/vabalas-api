@@ -5,7 +5,7 @@ public enum OfferStatus
     Pending,
     Accepted,
     Declined,
-    Deprecated
+    Deprecated,
 }
 
 static class OfferStatusParser

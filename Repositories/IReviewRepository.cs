@@ -6,7 +6,7 @@ namespace vabalas_api.Repositories
     {
         Task<IEnumerable<Review>> GetAll();
 
-        Task<List<Review>> GetAllByJobId(Job job);
+        Task<List<Review>> GetAllByJobId(int id);
 
         Task<Review> GetById(int reviewId);
 

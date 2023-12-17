@@ -1,4 +1,4 @@
-global using vabalas_api.Data;
+﻿global using vabalas_api.Data;
 global using Microsoft.EntityFrameworkCore;
 using vabalas_api.Repositories;
 using vabalas_api.Repositories.Impl;
@@ -31,7 +31,7 @@ namespace vabalas_api
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IJobRepository, JobRepository>();
             builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
-            builder.Services.AddScoped<IJobOfferRepository, OfferRepository>();
+            builder.Services.AddScoped<IJobOfferRepository, JobOfferRepository>();
 
             // Services
             builder.Services.AddScoped<IJwtService, JwtService>();

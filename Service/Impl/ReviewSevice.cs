@@ -8,24 +8,27 @@ namespace vabalas_api.Service.Impl
     public class ReviewSevice : IReviewService 
     {
         private readonly IReviewRepository _reviewRepository;
-        private readonly IJobRepository _jobRepository;
+        private readonly IJobService _jobRepository;
+        private readonly IUserService _userService;
 
-        public ReviewSevice(IReviewRepository reviewRepository, IJobRepository jobRepository)
+        public ReviewSevice(IReviewRepository reviewRepository, IJobService jobService, IUserService userService)
         {
             _reviewRepository = reviewRepository;
-            _jobRepository = jobRepository;
+            _jobRepository = jobService;
+            _userService = userService;
         }
 
         public async Task<Review> Add(ReviewAddDto reviewDto)
         {
-            var job = await _jobRepository.GetById(reviewDto.JobId);
             var review = new Review();
+            
+            review.Author = await _userService.GetById(reviewDto.AuthorId);
+            review.Job = await _jobRepository.GetById(reviewDto.JobId);
             review.Title = reviewDto.Title;
             review.Description = reviewDto.Description;
-            review.AuthorName = reviewDto.AuthorName;
-            review.Job = job;
-            job.createdAt = DateTime.UtcNow;
-            job.updatedAt = DateTime.UtcNow;
+            review.Rating = reviewDto.Rating;
+            review.CreatedAt = DateTime.Now;
+            review.UpdatedAt = DateTime.Now;
 
             return await _reviewRepository.Add(review);
         }
@@ -45,9 +48,7 @@ namespace vabalas_api.Service.Impl
         }
         public async Task<List<Review>> GetAllByJobId(int jobId)
         {
-            var job = await _jobRepository.GetById(jobId);
-            return await _reviewRepository.GetAllByJobId(job);
+            return await _reviewRepository.GetAllByJobId(jobId);
         }
-
     }
 }
