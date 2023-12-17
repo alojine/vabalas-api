@@ -31,7 +31,7 @@ namespace vabalas_api
             builder.Services.AddScoped<IUserRepository, UserRepository>();
             builder.Services.AddScoped<IJobRepository, JobRepository>();
             builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
-            //builder.Services.AddScoped<IJobOfferRepository, OfferRepository>();
+            builder.Services.AddScoped<IJobOfferRepository, JobOfferRepository>();
 
             // Services
             builder.Services.AddScoped<IJwtService, JwtService>();
@@ -39,7 +39,7 @@ namespace vabalas_api
             builder.Services.AddScoped<IStatisticsService, StatisticsService>();
             builder.Services.AddScoped<IUserService,UserService>();
             builder.Services.AddScoped<IReviewService,ReviewSevice>();
-            //builder.Services.AddScoped<IJobOfferService, JobOfferService>();
+            builder.Services.AddScoped<IJobOfferService, JobOfferService>();
 
             // Authentication
             builder.Services.AddAuthentication().AddJwtBearer();
