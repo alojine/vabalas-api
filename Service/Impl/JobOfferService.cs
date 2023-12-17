@@ -54,7 +54,7 @@ namespace vabalas_api.Service.Impl
 
             offer.Client = client;
             offer.Job = await _jobService.GetById(offerDto.JobId);
-            offer.OfferStatus = OfferStatusParser.ToEnum(offerDto.Status);
+            offer.OfferStatus = OfferStatus.Pending;
             offer.Description = offerDto.Description;
             offer.JobDate = offerDto.JobDate;
             offer.CreatedAt = DateTime.Now;

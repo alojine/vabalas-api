@@ -14,6 +14,11 @@ namespace vabalas_api.Models
         
         [JsonIgnore]
         public virtual ICollection<JobOffer> JobOffers { get; set; }
+        
+        [JsonIgnore]
         public virtual ICollection<Job> Jobs { get; set; }
+        
+        [JsonIgnore]
+        public virtual ICollection<Review> Reviews { get; set; }
     }
 }

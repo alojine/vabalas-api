@@ -7,7 +7,7 @@ namespace vabalas_api.Service
     {
         Task<Job> Add(JobAddDto jobDto);
 
-        Task<IEnumerable<Job>> FindAll();
+        Task<IEnumerable<Job>> GetAll();
 
         Task<Job> GetById(int jobId);
 

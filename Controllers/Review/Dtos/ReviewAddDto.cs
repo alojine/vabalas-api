@@ -2,9 +2,11 @@
 {
     public class ReviewAddDto
     {
+        public int AuthorId { get; set; }
+        public int JobId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
-        public int JobId { get; set; }
-        public string AuthorName { get; set; }
+        
+        public decimal Rating { get; set; }
     }
 }

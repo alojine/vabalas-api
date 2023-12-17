@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
+using vabalas_api.Mappers;
 using vabalas_api.Service;
 
 namespace vabalas_api.Controllers.Statistics;
@@ -31,5 +32,11 @@ public class StatisticsController : ControllerBase
     public async Task<ActionResult<int>> GetCategoryDistribution()
     {
         return Ok(await _statisticsService.GetCategoryDistribution());
+    }
+    
+    [HttpGet("best-jobs")]
+    public async Task<ActionResult<List<Models.Job>>> GetBestJobs()
+    {
+        return Ok(await _statisticsService.GetBestRatedJobs());
     }
 }

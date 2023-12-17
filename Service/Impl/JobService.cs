@@ -17,6 +17,17 @@ namespace vabalas_api.Service.Impl
             _jobRepository = repository;
             _userRepository = userRepository;
         }
+        
+        public async Task<Job> GetById(int jobId)
+        {
+            return await _jobRepository.GetById(jobId);
+        }
+        
+        public async Task<List<Job>> GetAllByUserId(int userId)
+        {
+            var user = await _userRepository.GetById(userId);
+            return await _jobRepository.GetAllByUserId(user);
+        }
 
         public async Task<Job> Add(JobAddDto jobDto)
         {
@@ -36,14 +47,9 @@ namespace vabalas_api.Service.Impl
             return await _jobRepository.Add(job); 
         }
         
-        public async Task<IEnumerable<Job>> FindAll()
+        public async Task<IEnumerable<Job>> GetAll()
         {
             return await _jobRepository.GetAll();
-        }
-
-        public async Task<Job> GetById(int jobId)
-        {
-            return await _jobRepository.GetById(jobId);
         }
 
         public async Task<bool> Delete(int jobId)
@@ -55,12 +61,6 @@ namespace vabalas_api.Service.Impl
             }
             
             return await _jobRepository.Delete(job);
-        }
-        
-        public async Task<List<Job>> GetAllByUserId(int userId)
-        {
-            var user = await _userRepository.GetById(userId);
-            return await _jobRepository.GetAllByUserId(user);
         }
 
         public async Task<Job> Update(JobUpdateDto jobUpdateDto)

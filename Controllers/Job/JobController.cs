@@ -23,7 +23,7 @@ namespace vabalas_api.Controllers
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _jobService.FindAll());
+            return Ok(await _jobService.GetAll());
         }
 
         [HttpPost]
