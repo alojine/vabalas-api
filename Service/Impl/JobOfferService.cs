@@ -1,4 +1,4 @@
-﻿using vabalas_api.Controllers.JobOffer.Dtos;
+﻿/*using vabalas_api.Controllers.JobOffer.Dtos;
 using vabalas_api.Enums;
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
@@ -78,3 +78,4 @@ namespace vabalas_api.Service.Impl
 
     }
 }
+*/

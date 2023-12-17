@@ -1,4 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
+﻿/*using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Controllers.JobOffer.Dtos;
 using vabalas_api.Service;
@@ -54,3 +54,4 @@ namespace vabalas_api.Controllers.JobOffer
         }
     }
 }
+*/

@@ -1,11 +1,15 @@
-﻿using vabalas_api.Enums;
+﻿using System.ComponentModel.DataAnnotations.Schema;
+using vabalas_api.Enums;
 
 namespace vabalas_api.Models
 {
     public class Job
     {
         public int Id { get; set; }
-        public User User { get; set; }
+        
+        [ForeignKey("User")]
+        public int UserId { get; set; }
+        public virtual User User { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public JobCategory Category { get; set; }   

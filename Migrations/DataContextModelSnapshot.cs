@@ -72,14 +72,13 @@ namespace vabalas_api.Migrations
 
                     SqlServerPropertyBuilderExtensions.UseIdentityColumn(b.Property<int>("Id"));
 
+                    b.Property<int>("ClientId")
+                        .HasColumnType("int");
+
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime2");
 
-                    b.Property<string>("CustomerName")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("CustomerPhoneNumber")
+                    b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
@@ -89,14 +88,15 @@ namespace vabalas_api.Migrations
                     b.Property<int>("JobId")
                         .HasColumnType("int");
 
-                    b.Property<string>("Note")
-                        .IsRequired()
-                        .HasColumnType("nvarchar(max)");
-
                     b.Property<int>("OfferStatus")
                         .HasColumnType("int");
 
+                    b.Property<DateTime>("UpdatedAt")
+                        .HasColumnType("datetime2");
+
                     b.HasKey("Id");
+
+                    b.HasIndex("ClientId");
 
                     b.HasIndex("JobId");
 
@@ -177,9 +177,9 @@ namespace vabalas_api.Migrations
             modelBuilder.Entity("vabalas_api.Models.Job", b =>
                 {
                     b.HasOne("vabalas_api.Models.User", "User")
-                        .WithMany()
+                        .WithMany("Jobs")
                         .HasForeignKey("UserId")
-                        .OnDelete(DeleteBehavior.Cascade)
+                        .OnDelete(DeleteBehavior.Restrict)
                         .IsRequired();
 
                     b.Navigation("User");
@@ -187,11 +187,19 @@ namespace vabalas_api.Migrations
 
             modelBuilder.Entity("vabalas_api.Models.JobOffer", b =>
                 {
+                    b.HasOne("vabalas_api.Models.User", "Client")
+                        .WithMany("JobOffers")
+                        .HasForeignKey("ClientId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
                     b.HasOne("vabalas_api.Models.Job", "Job")
                         .WithMany()
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.Navigation("Client");
 
                     b.Navigation("Job");
                 });
@@ -205,6 +213,13 @@ namespace vabalas_api.Migrations
                         .IsRequired();
 
                     b.Navigation("Job");
+                });
+
+            modelBuilder.Entity("vabalas_api.Models.User", b =>
+                {
+                    b.Navigation("JobOffers");
+
+                    b.Navigation("Jobs");
                 });
 #pragma warning restore 612, 618
         }

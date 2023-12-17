@@ -9,5 +9,9 @@
         public string PasswordHash { get; set; }
         public DateTime CreatedAt { get; set; }
         public DateTime UpdatedAt { get; set; }
+        
+        
+        public virtual ICollection<JobOffer> JobOffers { get; set; }
+        public virtual ICollection<Job> Jobs { get; set; }
     }
 }
