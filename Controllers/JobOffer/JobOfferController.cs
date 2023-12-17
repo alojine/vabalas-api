@@ -20,18 +20,6 @@ namespace vabalas_api.Controllers.JobOffer
         {
             return Ok(await _jobOfferService.GetAll());
         }
-        
-        [HttpPost("{userId}/{status}/")]
-        public async Task<IActionResult> GetByStatus(int userId, string status)
-        {
-            return Ok(await _jobOfferService.GetAllByUserIdAndStatus(userId, status));
-        }
-        
-        [HttpPut("respond/")]
-        public async Task<IActionResult> RespondToOffer(JobOfferResponseDto jobOfferResponseDto)
-        {
-            return Ok(await _jobOfferService.RespondToOffer(jobOfferResponseDto));
-        }
 
         [HttpGet("{offerId}")]
         public async Task<IActionResult> GetById(int offerId)
@@ -39,16 +27,22 @@ namespace vabalas_api.Controllers.JobOffer
             return Ok(await _jobOfferService.GetById(offerId));
         }
 
-        [HttpPost]
-        public async Task<ActionResult<Models.JobOffer>> Add(JobOfferDto offerDto)
+        [HttpGet("{userId}/{status}/")]
+        public async Task<IActionResult> GetByStatus(int userId, string status)
         {
-            return Ok(await _jobOfferService.Add(offerDto));
+            return Ok(await _jobOfferService.GetAllByUserIdAndStatus(userId, status));
         }
         
-        [HttpDelete("{offerId}")]
-        public async Task<ActionResult<Models.JobOffer>> Delete(int offerId)
+        [HttpGet("job-owner/{userId}")]
+        public async Task<ActionResult<List<Models.Job>>> GetJobById(int userId)
         {
-            return Ok(await _jobOfferService.Delete(offerId));
+            return Ok(await _jobOfferService.GetAllByUserId(userId));
+        }
+
+        [HttpPost]
+        public async Task<ActionResult<Models.JobOffer>> SendOffer(JobOfferDto offerDto)
+        {
+            return Ok(await _jobOfferService.SendOffer(offerDto));
         }
         
         [HttpPut]
@@ -57,10 +51,16 @@ namespace vabalas_api.Controllers.JobOffer
             return Ok(await _jobOfferService.Update(offerDto));
         }
         
-        [HttpGet("worker/{userId}")]
-        public async Task<ActionResult<List<Models.Job>>> GetJobById(int userId)
+        [HttpPut("respond/{offerId}/{status}/")]
+        public async Task<IActionResult> RespondToOffer(int offerId, string status)
         {
-            return Ok(await _jobOfferService.GetAllByUserId(userId));
+            return Ok(await _jobOfferService.RespondToOffer(offerId, status));
+        }
+        
+        [HttpDelete("{offerId}")]
+        public async Task<ActionResult<Models.JobOffer>> Delete(int offerId)
+        {
+            return Ok(await _jobOfferService.Delete(offerId));
         }
     }
 }

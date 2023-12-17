@@ -5,14 +5,14 @@ namespace vabalas_api.Service
 {
     public interface IJobOfferService
     {
-        Task<JobOffer> Add(JobOfferDto offerDto);
+        Task<JobOffer> SendOffer(JobOfferDto offerDto);
         Task<IEnumerable<JobOffer>> GetAll();
         Task<bool> Delete(int offerId);
         Task<JobOffer> GetById(int offerId);
         Task<JobOffer> Update(JobOfferDto offerDto);
         Task<IEnumerable<JobOffer>> GetAllByUserIdAndStatus(int userId, string status);
         Task<List<JobOffer>> GetAllByUserId(int userId);
-        Task<JobOffer> RespondToOffer(JobOfferResponseDto offerResponseDto);
+        Task<JobOffer> RespondToOffer(int offerId, string status);
 
     }
 }

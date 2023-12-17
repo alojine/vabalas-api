@@ -36,24 +36,37 @@ namespace vabalas_api.Service.Impl
             return await _jobOfferRepository.GetAllByUserIdAndStatus(user, status);
         }
         
-        public async Task<JobOffer> Add(JobOfferDto offerDto)
+        public async Task<JobOffer> SendOffer(JobOfferDto offerDto)
         {
             var offer = new JobOffer();
+            var client = await _userService.GetByEmail(offerDto.CustomerEmail);
             var job = await _jobService.GetById(offerDto.JobId);
             
-            offer.CreatedAt = DateTime.UtcNow;
-            offer.JobDate = offerDto.JobDate;
+            if (client.Id == job.UserId)
+            {
+                throw new NotValidException($"Cannot create offer where user with id:{client.Id} is client and job owner.");
+            } 
+            if (offerDto.JobDate < DateTime.Now.AddHours(1))
+            {
+                throw new NotSupportedException(
+                    $"Offer with client id:{client.Id} cannot be offered less than 1 hour from current time.");
+            }
+
+            offer.Client = client;
+            offer.Job = await _jobService.GetById(offerDto.JobId);
             offer.OfferStatus = OfferStatusParser.ToEnum(offerDto.Status);
             offer.Description = offerDto.Description;
-            offer.Job = job;
+            offer.JobDate = offerDto.JobDate;
+            offer.CreatedAt = DateTime.Now;
+            offer.UpdatedAt = DateTime.Now;
 
             return await _jobOfferRepository.Add(offer);
         }
 
-        public async Task<JobOffer> RespondToOffer(JobOfferResponseDto offerResponseDto)
+        public async Task<JobOffer> RespondToOffer(int offerId, string status)
         {
-            var offer = await GetById(offerResponseDto.JobOfferId);
-            offer.OfferStatus = OfferStatusParser.ToEnum(offerResponseDto.Status);
+            var offer = await GetById(offerId);
+            offer.OfferStatus = OfferStatusParser.ToEnum(status);
 
             return await _jobOfferRepository.Update(offer);
         }
