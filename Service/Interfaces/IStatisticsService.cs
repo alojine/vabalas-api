@@ -7,7 +7,7 @@ public interface IStatisticsService
 {
     Task<int> GetTotalAmountOfJobs();
 
-    Task<int> GetTotalAmountOfJobsByCategory(string category);
+    Task<int> GetTotalAmountOfJobsByCategory(string jobCategory);
 
     Task<List<CategoryDistributionDto>> GetCategoryDistribution();
 
