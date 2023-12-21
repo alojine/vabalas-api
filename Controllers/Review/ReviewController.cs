@@ -19,7 +19,7 @@ namespace vabalas_api.Controllers.Review
         [HttpGet]
         public async Task<IActionResult> GetAll()
         {
-            return Ok(await _reviewService.FindAll());
+            return Ok(await _reviewService.GetAll());
         }
         [HttpPost]
         public async Task<ActionResult<Models.Review>> add(ReviewAddDto reviewDto)

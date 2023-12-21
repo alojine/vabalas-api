@@ -1,7 +1,5 @@
 ﻿global using vabalas_api.Data;
 global using Microsoft.EntityFrameworkCore;
-using vabalas_api.Repositories;
-using vabalas_api.Repositories.Impl;
 using vabalas_api.Service;
 using vabalas_api.Service.Impl;
 using Microsoft.OpenApi.Models;
@@ -26,13 +24,7 @@ namespace vabalas_api
             });
             builder.Services.AddEndpointsApiExplorer();
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
-
-            // Repositories
-            builder.Services.AddScoped<IUserRepository, UserRepository>();
-            builder.Services.AddScoped<IJobRepository, JobRepository>();
-            builder.Services.AddScoped<IReviewRepository, ReviewRepository>();
-            builder.Services.AddScoped<IJobOfferRepository, JobOfferRepository>();
-
+            
             // Services
             builder.Services.AddScoped<IJwtService, JwtService>();
             builder.Services.AddScoped<IJobService, JobService>();
