@@ -9,25 +9,39 @@ namespace vabalas_api.Service.Impl
     public class JobOfferService : IJobOfferService
     {
         private readonly IJobOfferRepository _jobOfferRepository;
+        private readonly DataContext _context;
         private readonly IUserService _userService;
         private readonly IJobService _jobService;
 
-        public JobOfferService(IJobOfferRepository jobOfferRepository, IJobService jobService, IUserService userService)
+        public JobOfferService(IJobOfferRepository jobOfferRepository, DataContext context, IJobService jobService, IUserService userService)
         {
             _jobOfferRepository = jobOfferRepository;
+            _context = context;
             _userService = userService;
             _jobService = jobService;
         }
         
         public async Task<JobOffer> GetById(int offerId)
         {
-            return await _jobOfferRepository.GetById(offerId);
+            var jobOffer = await _context.JobOffers.FindAsync(offerId);
+            if (jobOffer == null)
+            {
+                throw new NotFoundException($"Job with id: {jobOffer} was not found.");
+            }
+
+            return jobOffer;
         }
         
         public async Task<List<JobOffer>> GetAllByUserId(int userId)
         {
             var user = await _userService.GetById(userId);
-            return await _jobOfferRepository.GetAllByUserId(user);
+            var jobOfferList = await _context.JobOffers.Where(jo => (jo.Job.User == user)).ToListAsync();
+            if (jobOfferList == null)
+            {
+                //throw new 
+            }
+            
+            return jobOfferList;
         }
         
         public async Task<IEnumerable<JobOffer>> GetAllByUserIdAndStatus(int userId,string status)
