@@ -12,9 +12,9 @@ public interface IUserService
 
     Task<User> GetByEmail(string email);
 
-    Task<User> GetById(int id);
+    Task<User> GetById(int userId);
 
     Task<User> Update(UserUpdateDto userDto);
 
-    Task<bool> Delete(int id);
+    Task<bool> Delete(int userId);
 }

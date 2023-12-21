@@ -2,23 +2,25 @@
 using vabalas_api.Enums;
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
-using vabalas_api.Repositories;
 
 namespace vabalas_api.Service.Impl
 {
     public class JobOfferService : IJobOfferService
     {
-        private readonly IJobOfferRepository _jobOfferRepository;
         private readonly DataContext _context;
         private readonly IUserService _userService;
         private readonly IJobService _jobService;
 
-        public JobOfferService(IJobOfferRepository jobOfferRepository, DataContext context, IJobService jobService, IUserService userService)
+        public JobOfferService(DataContext context, IJobService jobService, IUserService userService)
         {
-            _jobOfferRepository = jobOfferRepository;
             _context = context;
             _userService = userService;
             _jobService = jobService;
+        }
+        
+        public async Task<IEnumerable<JobOffer>> GetAll()
+        {
+            return await _context.JobOffers.ToListAsync();
         }
         
         public async Task<JobOffer> GetById(int offerId)
@@ -26,7 +28,8 @@ namespace vabalas_api.Service.Impl
             var jobOffer = await _context.JobOffers.FindAsync(offerId);
             if (jobOffer == null)
             {
-                throw new NotFoundException($"Job with id: {jobOffer} was not found.");
+                // throw new NotFoundException($"Job with id: {jobOffer} was not found.");
+                throw new NotFoundException(VabalasExceptionMessages.JobNotFound, 404);
             }
 
             return jobOffer;
@@ -38,7 +41,7 @@ namespace vabalas_api.Service.Impl
             var jobOfferList = await _context.JobOffers.Where(jo => (jo.Job.User == user)).ToListAsync();
             if (jobOfferList == null)
             {
-                //throw new 
+                throw new NotFoundException(VabalasExceptionMessages.JobNotFound, 404);
             }
             
             return jobOfferList;
@@ -47,7 +50,9 @@ namespace vabalas_api.Service.Impl
         public async Task<IEnumerable<JobOffer>> GetAllByUserIdAndStatus(int userId,string status)
         {
             var user = await _userService.GetById(userId);
-            return await _jobOfferRepository.GetAllByUserIdAndStatus(user, status);
+            return await _context.JobOffers
+                .Where(jo => (jo.Job.User == user) && (jo.OfferStatus == OfferStatusParser.ToEnum(status)))
+                .ToListAsync();
         }
         
         public async Task<JobOffer> SendOffer(JobOfferDto offerDto)
@@ -73,8 +78,11 @@ namespace vabalas_api.Service.Impl
             offer.JobDate = offerDto.JobDate;
             offer.CreatedAt = DateTime.Now;
             offer.UpdatedAt = DateTime.Now;
-
-            return await _jobOfferRepository.Add(offer);
+            
+            _context.JobOffers.Add(offer);
+            await _context.SaveChangesAsync();
+            
+            return offer;
         }
 
         public async Task<JobOffer> RespondToOffer(int offerId, string status)
@@ -82,34 +90,32 @@ namespace vabalas_api.Service.Impl
             var offer = await GetById(offerId);
             offer.OfferStatus = OfferStatusParser.ToEnum(status);
 
-            return await _jobOfferRepository.Update(offer);
-        }
-        
-        public async Task<IEnumerable<JobOffer>> GetAll()
-        {
-            return await _jobOfferRepository.GetAll();
+            _context.JobOffers.Update(offer);
+            await _context.SaveChangesAsync();
+            return offer;
         }
         
         public async Task<JobOffer> Update(JobOfferDto offerDto)
         {
-            var offer = await _jobOfferRepository.GetById(offerDto.Id);
+            var offer = await GetById(offerDto.JobId);
             
             // possible to change description and date only
             offer.Description = offerDto.Description;
             offer.JobDate = offerDto.JobDate;
             offer.UpdatedAt = DateTime.Now;
             
-            return await _jobOfferRepository.Update(offer);
+            _context.JobOffers.Update(offer);
+            await _context.SaveChangesAsync();
+            return offer;
         }
         
         public async Task<bool> Delete (int offerId)
         {
-            var jobOffer = await _jobOfferRepository.GetById(offerId);
-            if(jobOffer == null)
-            {
-                throw new NotFoundException($"Offer with id: {offerId} was not found.");
-            }
-            return await _jobOfferRepository.Delete(jobOffer);
+            var offer = await GetById(offerId);
+
+            _context.JobOffers.Remove(offer);
+            await _context.SaveChangesAsync();
+            return true;
         }
     }
 }
