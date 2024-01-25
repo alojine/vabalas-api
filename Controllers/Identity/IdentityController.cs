@@ -1,4 +1,4 @@
-﻿using System.IdentityModel.Tokens.Jwt;
+﻿/*using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
@@ -37,7 +37,7 @@ public class IdentityController : ControllerBase
 
         if (requestDto.Password != requestDto.confirmPassword)
             throw new BadRequestException("Passwords do not match");
-
+        
         var newUser = new IdentityUser
         {
             UserName = requestDto.Name,
@@ -111,4 +111,4 @@ public class IdentityController : ControllerBase
         return (Token: tokenString, Expiration: expiration);
     }
     
-}
+}*/
