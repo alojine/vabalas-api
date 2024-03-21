@@ -1,4 +1,4 @@
-﻿/*using System.IdentityModel.Tokens.Jwt;
+﻿using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
@@ -6,6 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Identity.Client;
 using Microsoft.IdentityModel.Tokens;
 using vabalas_api.Exceptions;
+using vabalas_api.Models;
 using vabalas_api.Service.Jwt;
 using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegisteredClaimNames;
 
@@ -15,13 +16,11 @@ namespace vabalas_api.Controllers;
 [ApiController]
 public class IdentityController : ControllerBase
 {
-    private readonly UserManager<IdentityUser> _userManager;
-    private readonly JwtConfig _jwtConfig;
+    private readonly UserManager<VabalasUser> _userManager;
 
-    public IdentityController(UserManager<IdentityUser> userManager, JwtConfig jwtConfig)
+    public IdentityController(UserManager<VabalasUser> userManager)
     {
         _userManager = userManager;
-        _jwtConfig = jwtConfig;
     }
 
     [HttpPost]
@@ -37,11 +36,12 @@ public class IdentityController : ControllerBase
 
         if (requestDto.Password != requestDto.confirmPassword)
             throw new BadRequestException("Passwords do not match");
-        
-        var newUser = new IdentityUser
+
+        var newUser = new VabalasUser
         {
-            UserName = requestDto.Name,
-            Email = requestDto.Email,
+            FirstName = requestDto.FirstName,
+            LastName = requestDto.LastName,
+            Email = requestDto.Email
         };
 
         var isCreated = await _userManager.CreateAsync(newUser, requestDto.Password);
@@ -53,8 +53,8 @@ public class IdentityController : ControllerBase
         return Ok(new
         {
             Token = token, Expiration = expiration,
-            Email = newUser.Email, Name = requestDto.Name,
-            UserId = newUser.Id,
+            Email = newUser.Email,
+            FirstName = newUser.FirstName
         });
     }
     
@@ -86,8 +86,12 @@ public class IdentityController : ControllerBase
     private (string Token, DateTime Expiration) GenerateJwtToken(IdentityUser user)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
-        var key = Encoding.UTF8.GetBytes(_jwtConfig.Secret);
-
+        // 
+        
+        // var key = Encoding.UTF8.GetBytes(_jwtConfig.Secret);
+        DotNetEnv.Env.Load();
+        var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET"));
+        
         var claims = new List<Claim>
         {
             new Claim(ClaimTypes.NameIdentifier, user.Id),
@@ -95,7 +99,8 @@ public class IdentityController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        var expiration = DateTime.UtcNow.AddHours(_jwtConfig.ExpirationInHours);
+        // var expiration = DateTime.UtcNow.AddHours(_jwtConfig.ExpirationInHours);
+        var expiration = DateTime.UtcNow.AddHours(24);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
@@ -111,4 +116,4 @@ public class IdentityController : ControllerBase
         return (Token: tokenString, Expiration: expiration);
     }
     
-}*/
+}

@@ -2,12 +2,14 @@
 global using Microsoft.EntityFrameworkCore;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using vabalas_api.Service;
 using vabalas_api.Service.Impl;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
-using vabalas_api.Configs;
+using vabalas_api.Models;
+using vabalas_api.Service.Jwt;
 
 
 namespace vabalas_api
@@ -36,11 +38,20 @@ namespace vabalas_api
                 .Replace("{JWT_SECRET}", Environment.GetEnvironmentVariable("JWT_SECRET"));
             // builder.Configuration.AddConfiguration(EnvConfig.InitializeEnvironemnt());
 
+            // builder.Services.Configure<JwtConfig>(config =>
+            // {
+            //     config.Secret = Environment.GetEnvironmentVariable("JWT_SECRET");
+            //     config.ExpirationInHours = 24;
+            // });
+
+            builder.Services.AddIdentity<VabalasUser, IdentityRole>()
+                .AddEntityFrameworkStores<DataContext>();
+                
             builder.Services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 x.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;     
             }).AddJwtBearer(x =>
             {
                 x.TokenValidationParameters = new TokenValidationParameters
@@ -57,10 +68,8 @@ namespace vabalas_api
             });
 
             builder.Services.AddAuthorization();
-            
             builder.Services.AddControllers();
             var connectionString = config["ConnectionStrings:DefaultConnection"];
-            Console.WriteLine(connectionString);
             builder.Services.AddDbContext<DataContext>(options =>
             {
                 options.UseMySql(connectionString, ServerVersion.AutoDetect(connectionString));
@@ -75,9 +84,6 @@ namespace vabalas_api
             builder.Services.AddScoped<IUserService,UserService>();
             builder.Services.AddScoped<IReviewService,ReviewSevice>();
             builder.Services.AddScoped<IJobOfferService, JobOfferService>();
-
-            // Authentication
-            // builder.Services.AddAuthentication().AddJwtBearer();
             
             builder.Services.AddSwaggerGen(options =>
             {
