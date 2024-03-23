@@ -18,9 +18,36 @@ public class IdentityController : ControllerBase
 {
     private readonly UserManager<VabalasUser> _userManager;
 
-    public IdentityController(UserManager<VabalasUser> userManager)
+    private readonly DataContext _dataContext;
+
+    public IdentityController(UserManager<VabalasUser> userManager, DataContext dataContext)
     {
         _userManager = userManager;
+        _dataContext = dataContext;
+    }
+    
+    [HttpPost]
+    [Route("Login")]
+    public async Task<IActionResult> Login([FromBody] UserLoginDto requestDto)
+    {
+        if (!ModelState.IsValid)
+            throw new BadRequestException(VabalasExceptionMessages.InvalidPayload, 400);
+
+        var existingUser = _dataContext.VabalasUsers.FirstOrDefault(u => u.Email == requestDto.Email);
+        
+        if (existingUser == null)
+            throw new BadRequestException("Invalid email", 404);
+
+        var isCorrect = await _userManager.CheckPasswordAsync(existingUser, requestDto.Password);
+        if (!isCorrect)
+            throw new BadRequestException("Invalid email", 404);
+
+        var (token, expiration) = GenerateJwtToken(existingUser);
+        return Ok(new
+        {
+            Token = token, 
+            Expiration = expiration
+        });
     }
 
     [HttpPost]
@@ -41,52 +68,28 @@ public class IdentityController : ControllerBase
         {
             FirstName = requestDto.FirstName,
             LastName = requestDto.LastName,
-            Email = requestDto.Email
+            Email = requestDto.Email,
+            UserName = requestDto.Email,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow
         };
 
         var isCreated = await _userManager.CreateAsync(newUser, requestDto.Password);
-
+        
         if (!isCreated.Succeeded)
             throw new BadRequestException(string.Join("; ", isCreated.Errors.Select(e => e.Description)));
-
+        
         var (token, expiration) = GenerateJwtToken(newUser);
         return Ok(new
         {
-            Token = token, Expiration = expiration,
-            Email = newUser.Email,
-            FirstName = newUser.FirstName
-        });
-    }
-    
-    [HttpPost]
-    [Route("Login")]
-    public async Task<IActionResult> Login([FromBody] UserLoginDto requestDto)
-    {
-        if (!ModelState.IsValid)
-            throw new BadRequestException(VabalasExceptionMessages.InvalidPayload, 400);
-
-        var existingUser = await _userManager.FindByEmailAsync(requestDto.Email);
-        if (existingUser == null)
-            throw new BadRequestException("Invalid email", 404);
-
-        var isCorrect = await _userManager.CheckPasswordAsync(existingUser, requestDto.Password);
-        if (!isCorrect)
-            throw new BadRequestException("Invalid email", 404);
-
-        var (token, expiration) = GenerateJwtToken(existingUser);
-        return Ok(new
-        {
             Token = token, 
-            Expiration = expiration,
-            Email = existingUser.Email, 
-            Name = existingUser.UserName,
+            Expiration = expiration
         });
     }
     
-    private (string Token, DateTime Expiration) GenerateJwtToken(IdentityUser user)
+    private (string Token, DateTime Expiration) GenerateJwtToken(VabalasUser user)
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
-        // 
         
         // var key = Encoding.UTF8.GetBytes(_jwtConfig.Secret);
         DotNetEnv.Env.Load();

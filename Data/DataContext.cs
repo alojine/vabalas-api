@@ -15,6 +15,8 @@ namespace vabalas_api.Data
         
         public DbSet<JobOffer> JobOffers { get; set; }
         
+        public DbSet<VabalasUser> VabalasUsers { get; set; }
+        
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<JobOffer>()
