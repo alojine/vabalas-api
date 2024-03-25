@@ -3,7 +3,7 @@ using System.Security.Claims;
 using System.Text;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Identity.Client;
+using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
@@ -18,12 +18,15 @@ public class IdentityController : ControllerBase
 {
     private readonly UserManager<VabalasUser> _userManager;
 
-    private readonly DataContext _dataContext;
+    private readonly DataContext _context;
 
-    public IdentityController(UserManager<VabalasUser> userManager, DataContext dataContext)
+    private readonly JwtConfig _jwtConfig;
+
+    public IdentityController(UserManager<VabalasUser> userManager, DataContext context, IOptions<JwtConfig> jwtConfig)
     {
         _userManager = userManager;
-        _dataContext = dataContext;
+        _context = context;
+        _jwtConfig = jwtConfig.Value;
     }
     
     [HttpPost]
@@ -33,7 +36,7 @@ public class IdentityController : ControllerBase
         if (!ModelState.IsValid)
             throw new BadRequestException(VabalasExceptionMessages.InvalidPayload, 400);
 
-        var existingUser = _dataContext.VabalasUsers.FirstOrDefault(u => u.Email == requestDto.Email);
+        var existingUser = _context.VabalasUsers.FirstOrDefault(u => u.Email == requestDto.Email);
         
         if (existingUser == null)
             throw new BadRequestException("Invalid email", 404);
@@ -91,9 +94,7 @@ public class IdentityController : ControllerBase
     {
         var jwtTokenHandler = new JwtSecurityTokenHandler();
         
-        // var key = Encoding.UTF8.GetBytes(_jwtConfig.Secret);
-        DotNetEnv.Env.Load();
-        var key = Encoding.UTF8.GetBytes(Environment.GetEnvironmentVariable("JWT_SECRET"));
+        var key = Encoding.UTF8.GetBytes(_jwtConfig.Secret);
         
         var claims = new List<Claim>
         {
@@ -102,8 +103,7 @@ public class IdentityController : ControllerBase
             new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString())
         };
 
-        // var expiration = DateTime.UtcNow.AddHours(_jwtConfig.ExpirationInHours);
-        var expiration = DateTime.UtcNow.AddHours(24);
+        var expiration = DateTime.UtcNow.AddHours(_jwtConfig.ExpirationInHours);
 
         var tokenDescriptor = new SecurityTokenDescriptor
         {
