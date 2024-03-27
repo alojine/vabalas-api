@@ -2,9 +2,9 @@
 
 namespace vabalas_api.Service.Impl;
 
-public class JobAverageRatingDto
+public class AverageJobRatingDto
 {
-    public JobAverageRatingDto(Job job, decimal averageRating)
+    public AverageJobRatingDto(Job job, decimal averageRating)
     {
         Job = job;
         AverageRating = averageRating;

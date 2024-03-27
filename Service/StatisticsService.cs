@@ -21,13 +21,13 @@ public class StatisticsService : IStatisticsService
     {
         var jobs = await _jobService.GetAll();
         
-        var jobRatings = new List<JobAverageRatingDto>();
+        var jobRatings = new List<AverageJobRatingDto>();
         foreach (var job in jobs)
         {
             var reviews = await _reviewService.GetAllByJobId(job.Id);
             var averageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0;
             
-            var jobAverageRatingDto = new JobAverageRatingDto(job, averageRating);
+            var jobAverageRatingDto = new AverageJobRatingDto(job, averageRating);
             
             jobRatings.Add(jobAverageRatingDto);
         }
