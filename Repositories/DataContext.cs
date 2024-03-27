@@ -25,11 +25,11 @@ namespace vabalas_api.Data
                 .HasForeignKey(jo => jo.ClientId)
                 .OnDelete(DeleteBehavior.Restrict);
 
-            modelBuilder.Entity<Job>()
-                .HasOne(j => j.User)
-                .WithMany(u => u.Jobs)
-                .HasForeignKey(j => j.UserId)
-                .OnDelete(DeleteBehavior.Restrict);
+            // modelBuilder.Entity<Job>()
+            //     .HasOne(j => j.User)
+            //     .WithMany(u => u.Jobs)
+            //     .HasForeignKey(j => j.UserId)
+            //     .OnDelete(DeleteBehavior.Restrict);
 
             modelBuilder.Entity<Review>()
                 .HasOne(r => r.Author)

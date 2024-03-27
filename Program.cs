@@ -9,6 +9,7 @@ using vabalas_api.Service.Impl;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using vabalas_api.Configs;
+using vabalas_api.Exceptions;
 using vabalas_api.Models;
 using vabalas_api.Service.Jwt;
 
@@ -25,7 +26,13 @@ namespace vabalas_api
 
             builder.Services.AddIdentity<VabalasUser, IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>();
-                
+            
+            builder.Services.Configure<JwtConfig>(jwt =>
+            {
+                jwt.Secret = config["JwtSettings:Key"]!;
+                jwt.ExpirationInHours = 2;
+            });
+            
             builder.Services.AddAuthentication(x =>
             {
                 x.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
@@ -33,23 +40,18 @@ namespace vabalas_api
                 x.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;     
             }).AddJwtBearer(x =>
             {
+                x.SaveToken = true;
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidIssuer = config["JwtSettings:Issuer"],
                     ValidAudience = config["JwtSettings:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey
                         (Encoding.UTF8.GetBytes(config["JwtSettings:Key"]!)),
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
+                    ValidateIssuer = false,
+                    ValidateAudience = false,
+                    ValidateLifetime = false,
                     ValidateIssuerSigningKey = true
                 };
-            });
-            
-            builder.Services.Configure<JwtConfig>(jwt =>
-            {
-                jwt.Secret = config["JwtSettings:Key"]!;
-                jwt.ExpirationInHours = 2;
             });
             
             builder.Services.AddAuthorization();
@@ -67,7 +69,7 @@ namespace vabalas_api
             builder.Services.AddScoped<IStatisticsService, StatisticsService>();
             builder.Services.AddScoped<IUserService,UserService>();
             builder.Services.AddScoped<IReviewService,ReviewSevice>();
-            builder.Services.AddScoped<IJobOfferService, JobOfferService>();
+            // builder.Services.AddScoped<IJobOfferService, JobOfferService>();
             
             builder.Services.AddSwaggerGen(options =>
             {
@@ -82,7 +84,7 @@ namespace vabalas_api
             });
 
             var app = builder.Build();
-
+            
             // Configure the HTTP request pipeline.
             if (app.Environment.IsDevelopment())
             {
@@ -90,6 +92,14 @@ namespace vabalas_api
                 app.UseSwaggerUI();
             }
 
+            app.UseExceptionHandler(c => c.Run(GlobalExceptionHandler.InvokeAsync));
+            
+            app.UseCors(cpb => cpb
+                .AllowAnyOrigin().
+                AllowAnyMethod().
+                AllowAnyHeader()
+            );
+            
             app.UseHttpsRedirection();
             app.UseAuthentication();
             app.UseAuthorization();

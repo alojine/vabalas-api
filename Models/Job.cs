@@ -7,9 +7,8 @@ namespace vabalas_api.Models
     {
         public int Id { get; set; }
         
-        [ForeignKey("User")]
-        public int UserId { get; set; }
-        public virtual User User { get; set; }
+        [ForeignKey("VabalasUser")]
+        public String UserId { get; set; }
         public string Title { get; set; }
         public string Description { get; set; }
         public JobCategory Category { get; set; }   
