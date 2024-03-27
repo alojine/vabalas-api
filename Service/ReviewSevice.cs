@@ -33,10 +33,10 @@ namespace vabalas_api.Service.Impl
             return review;
         }
         
-        public async Task<List<Review>> GetAllByJobId(int jobId)
-        {
-            return await _context.Reviews.Where(r => r.Job.Id == jobId).ToListAsync();
-        }
+        // public async Task<List<Review>> GetAllByJobId(Guid jobId)
+        // {
+        //     return await _context.Reviews.Where(r => r.Job.Id == jobId).ToListAsync();
+        // }
 
         // public async Task<Review> Add(ReviewAddDto reviewDto)
         // {

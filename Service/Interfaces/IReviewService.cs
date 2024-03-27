@@ -10,6 +10,6 @@ namespace vabalas_api.Service
 
         Task<bool> Delete(int reviewId);
 
-        Task<List<Review>> GetAllByJobId(int jobId);
+        // Task<List<Review>> GetAllByJobId(Guid jobId);
     }
 }

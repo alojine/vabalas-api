@@ -1,4 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations.Schema;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
 using vabalas_api.Models;
 
 namespace vabalas_api.Data
@@ -19,25 +20,67 @@ namespace vabalas_api.Data
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<JobOffer>()
-                .HasOne(jo => jo.Client)
-                .WithMany(u => u.JobOffers)
-                .HasForeignKey(jo => jo.ClientId)
-                .OnDelete(DeleteBehavior.Restrict);
+            modelBuilder.Entity<Job>(ConfigureJob);
+            modelBuilder.Entity<JobOffer>(ConfigureJobOffer);
+            modelBuilder.Entity<Review>(ConfigureReview);
+            modelBuilder.Entity<VabalasUser>(ConfigureVabalasUser);
+        }
 
-            // modelBuilder.Entity<Job>()
-            //     .HasOne(j => j.User)
-            //     .WithMany(u => u.Jobs)
-            //     .HasForeignKey(j => j.UserId)
-            //     .OnDelete(DeleteBehavior.Restrict);
+        private void ConfigureJob(EntityTypeBuilder<Job> builder)
+        {
+            builder.HasKey(j => j.Id);
 
-            modelBuilder.Entity<Review>()
-                .HasOne(r => r.Author)
-                .WithMany(u => u.Reviews)
+            builder.HasOne(j => j.Owner)
+                .WithMany(u => u.Jobs)
+                .HasForeignKey(j => j.OwnerId)
+                .IsRequired();
+        }
+
+        private void ConfigureJobOffer(EntityTypeBuilder<JobOffer> builder)
+        {
+            builder.HasKey(o => o.Id);
+
+            builder.HasOne(o => o.Sender)
+                .WithMany()
+                .HasForeignKey(o => o.SenderId)
+                .IsRequired();
+            
+            builder.HasOne(o => o.Job)
+                .WithMany(j => j.JobOffers)
+                .HasForeignKey(o => o.JobId)
+                .IsRequired();
+        }
+
+        private void ConfigureReview(EntityTypeBuilder<Review> builder)
+        {
+            builder.HasKey(r => r.Id);
+
+            builder.HasOne(r => r.Author)
+                .WithMany()
                 .HasForeignKey(r => r.AuthorId)
-                .OnDelete(DeleteBehavior.Restrict);
+                .IsRequired();
 
-            base.OnModelCreating(modelBuilder);
+            builder.HasOne(r => r.Job)
+                .WithMany(j => j.Reviews)
+                .HasForeignKey(r => r.JobId)
+                .IsRequired();
+        }
+        
+        private void ConfigureVabalasUser(EntityTypeBuilder<VabalasUser> builder)
+        {
+            builder.HasKey(u => u.Id);
+
+            builder.HasMany(u => u.Jobs)
+                .WithOne(j => j.Owner)
+                .HasForeignKey(j => j.OwnerId);
+
+            builder.HasMany(u => u.JobOffers)
+                .WithOne(o => o.Sender)
+                .HasForeignKey(o => o.SenderId);
+
+            builder.HasMany(u => u.Reviews)
+                .WithOne(r => r.Author)
+                .HasForeignKey(r => r.AuthorId);
         }
     }
 }

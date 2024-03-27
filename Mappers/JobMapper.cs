@@ -8,6 +8,6 @@ public class JobMapper : Profile
 {
     public JobMapper()
     {
-        CreateMap<Job, JobAddDto>();
+        CreateMap<Job, JobAddRequestDto>();
     }
 }

@@ -8,14 +8,14 @@ namespace vabalas_api.Service
     {
         Task<IEnumerable<Job>> GetAll();
 
-        Task<Job> GetJobById(int jobId);
+        Task<Job> GetJobById(Guid jobId);
         Task<List<Job>> GetAllByUserId(string userId);
 
         Task<List<Job>> GetAllByCategory(JobCategory jobCategory);
-        Task<Job> UpdateJob(JobUpdateDto jobDto, String userId);
+        Task<Job> UpdateJob(JobUpdateRequestDto jobRequestDto, String userId);
 
-        Task<Job> AddJob(JobAddDto jobDto, String userId);
+        Task<Job> AddJob(JobAddRequestDto jobAddDto, String userId);
 
-        Task<bool> DeleteJob(int jobId, String userId);
+        Task<bool> DeleteJob(Guid jobId, String userId);
     }
 }

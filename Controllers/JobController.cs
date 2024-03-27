@@ -1,5 +1,4 @@
 ﻿using System.Security.Claims;
-using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Controllers.Job.Dtos;
@@ -27,7 +26,7 @@ namespace vabalas_api.Controllers
         }
         
         [HttpGet("{jobId}")]
-        public async Task<ActionResult<Models.Job>> GetById(int jobId)
+        public async Task<ActionResult<Models.Job>> GetById(Guid jobId)
         {
             return Ok(await _jobService.GetJobById(jobId));
         }
@@ -40,24 +39,32 @@ namespace vabalas_api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Models.Job>> CreateJob(JobAddDto jobDto)
+        public async Task<ActionResult<Models.Job>> CreateJob(JobAddRequestDto jobAddDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            return Ok(await _jobService.AddJob(jobDto, userId));
+            return Ok(await _jobService.AddJob(jobAddDto, userId));
         }
         
         [HttpPut]
-        public async Task<ActionResult<Models.Job>> UpdateJob(JobUpdateDto jobDto)
+        public async Task<ActionResult<Models.Job>> UpdateJob(JobUpdateRequestDto jobRequestDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Ok(await _jobService.UpdateJob(jobDto, userId));
+            return Ok(await _jobService.UpdateJob(jobRequestDto, userId));
         }
 
         [HttpDelete("{jobId}")]
-        public async Task<ActionResult<Models.Job>> DeleteJob(int jobId)
+        public async Task<ActionResult<Models.Job>> DeleteJob(Guid jobId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             return Ok(await _jobService.DeleteJob(jobId, userId));
         }
+
+        // private JobResponseDto MapJobToJobResponseDto(Job job)
+        // {
+        //     return new JobResponseDto
+        //     {
+        //         
+        //     }
+        // }
     }
 }

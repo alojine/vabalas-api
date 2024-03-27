@@ -31,10 +31,10 @@ namespace vabalas_api.Controllers.Review
         {
             return Ok(await _reviewService.Delete(reviewId));
         }
-        [HttpGet("{jobId}")]
-        public async Task<ActionResult<List<Models.Review>>> getReviewById(int jobId)
-        {
-            return Ok(await _reviewService.GetAllByJobId(jobId));
-        }
+        // [HttpGet("{jobId}")]
+        // public async Task<ActionResult<List<Models.Review>>> getReviewById(Guid jobId)
+        // {
+        //     return Ok(await _reviewService.GetAllByJobId(jobId));
+        // }
     }
 }

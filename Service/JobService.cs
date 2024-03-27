@@ -19,7 +19,7 @@ namespace vabalas_api.Service.Impl
             return await _data.Job.ToListAsync();
         }
         
-        public async Task<Job> GetJobById(int jobId)
+        public async Task<Job> GetJobById(Guid jobId)
         {
             var job = await _data.Job.FindAsync(jobId);
             if (job == null)
@@ -32,7 +32,7 @@ namespace vabalas_api.Service.Impl
         
         public async Task<List<Job>> GetAllByUserId(string userId)
         {
-            return await _data.Job.Where(j => j.UserId == userId).ToListAsync();
+            return await _data.Job.Where(j => j.OwnerId == userId).ToListAsync();
         }
 
         public async Task<List<Job>> GetAllByCategory(JobCategory jobCategory)
@@ -40,43 +40,43 @@ namespace vabalas_api.Service.Impl
             return await _data.Job.Where(j => j.Category == jobCategory).ToListAsync();
         }
 
-        public async Task<Job> AddJob(JobAddDto jobDto, String userId)
+        public async Task<Job> AddJob(JobAddRequestDto jobAddDto, String userId)
         {
             var job = new Job();
 
-            job.Title = jobDto.Title;
-            job.Description = jobDto.Description;
-            job.Category = JobCatogryParser.ToEnum(jobDto.Category);
-            job.PhoneNumber = jobDto.PhoneNumber;
-            job.Price = jobDto.Price;
+            job.Title = jobAddDto.Title;
+            job.Description = jobAddDto.Description;
+            job.Category = JobCatogryParser.ToEnum(jobAddDto.Category);
+            job.PhoneNumber = jobAddDto.PhoneNumber;
+            job.Price = jobAddDto.Price;
             job.createdAt = DateTime.UtcNow;
             job.updatedAt = DateTime.UtcNow;
-            job.UserId = userId;
+            job.OwnerId = userId;
             
             _data.Job.Add(job);
             await _data.SaveChangesAsync();
             return job;
         }
         
-        public async Task<Job> UpdateJob(JobUpdateDto jobDto, String userId)
+        public async Task<Job> UpdateJob(JobUpdateRequestDto jobRequestDto, String userId)
         {
-            var job = _data.Job.FirstOrDefault(j => j.Id == jobDto.Id);
+            var job = _data.Job.FirstOrDefault(j => j.Id == jobRequestDto.Id);
 
             if (job == null)
             {
                 throw new NotFoundException("Job was not found");
             }
 
-            if (job.UserId != userId)
+            if (job.OwnerId != userId)
             {
                 throw new NotValidException("Only job owner can delete the job");
             }
             
-            job.Title = jobDto.Title;
-            job.Description = jobDto.Description;
-            job.PhoneNumber = jobDto.PhoneNumber;
-            job.Price = jobDto.Price;
-            job.Category = JobCatogryParser.ToEnum(jobDto.Category);
+            job.Title = jobRequestDto.Title;
+            job.Description = jobRequestDto.Description;
+            job.PhoneNumber = jobRequestDto.PhoneNumber;
+            job.Price = jobRequestDto.Price;
+            job.Category = JobCatogryParser.ToEnum(jobRequestDto.Category);
             job.updatedAt = DateTime.UtcNow;
         
             _data.Job.Update(job);
@@ -84,7 +84,7 @@ namespace vabalas_api.Service.Impl
             return job;
         }
 
-        public async Task<bool> DeleteJob(int jobId, String userId)
+        public async Task<bool> DeleteJob(Guid jobId, String userId)
         {
             var job = _data.Job.FirstOrDefault(j => j.Id == jobId);
             if (job == null)
@@ -92,7 +92,7 @@ namespace vabalas_api.Service.Impl
                 throw new NotFoundException("Job was not found");
             }
 
-            if (job.UserId != userId)
+            if (job.OwnerId != userId)
             {
                 throw new NotValidException("Only job owner can delete the job");
             }

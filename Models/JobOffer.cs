@@ -6,12 +6,17 @@ namespace vabalas_api.Models
 {
     public class JobOffer
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         
         [Required]
-        [ForeignKey("Client")]
-        public int ClientId { get; set; }
-        public virtual User Client { get; set; }
+        [ForeignKey("VabalasUser")]
+        public string SenderId { get; set; }
+        
+        public virtual VabalasUser Sender { get; set; }
+        
+        [Required]
+        [ForeignKey("Job")]
+        public Guid JobId { get; set; }
         
         public virtual Job Job { get; set; }
         

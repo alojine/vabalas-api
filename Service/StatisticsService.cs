@@ -17,25 +17,25 @@ public class StatisticsService : IStatisticsService
         _reviewService = reviewService;
     }
     
-    public async Task<List<Job>> GetBestRatedJobs()
-    {
-        var jobs = await _jobService.GetAll();
-        
-        var jobRatings = new List<AverageJobRatingDto>();
-        foreach (var job in jobs)
-        {
-            var reviews = await _reviewService.GetAllByJobId(job.Id);
-            var averageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0;
-            
-            var jobAverageRatingDto = new AverageJobRatingDto(job, averageRating);
-            
-            jobRatings.Add(jobAverageRatingDto);
-        }
-        
-        var bestRatedJobs = jobRatings.OrderByDescending(j => j.AverageRating).Select(j => j.Job).ToList();
-
-        return bestRatedJobs;
-    }
+    // public async Task<List<Job>> GetBestRatedJobs()
+    // {
+    //     var jobs = await _jobService.GetAll();
+    //     
+    //     var jobRatings = new List<AverageJobRatingDto>();
+    //     foreach (var job in jobs)
+    //     {
+    //         var reviews = await _reviewService.GetAllByJobId(job.Id);
+    //         var averageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0;
+    //         
+    //         var jobAverageRatingDto = new AverageJobRatingDto(job, averageRating);
+    //         
+    //         jobRatings.Add(jobAverageRatingDto);
+    //     }
+    //     
+    //     var bestRatedJobs = jobRatings.OrderByDescending(j => j.AverageRating).Select(j => j.Job).ToList();
+    //
+    //     return bestRatedJobs;
+    // }
 
     public async Task<int> GetTotalAmountOfJobs()
     {

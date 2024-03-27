@@ -14,7 +14,7 @@ namespace vabalas_api.Controllers;
 
 [Route("api/[controller]")]
 [ApiController]
-public class IdentityController : ControllerBase
+public class AuthController : ControllerBase
 {
     private readonly UserManager<VabalasUser> _userManager;
 
@@ -22,7 +22,7 @@ public class IdentityController : ControllerBase
 
     private readonly JwtConfig _jwtConfig;
 
-    public IdentityController(UserManager<VabalasUser> userManager, DataContext context, IOptions<JwtConfig> jwtConfig)
+    public AuthController(UserManager<VabalasUser> userManager, DataContext context, IOptions<JwtConfig> jwtConfig)
     {
         _userManager = userManager;
         _context = context;

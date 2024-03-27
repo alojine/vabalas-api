@@ -5,14 +5,22 @@ namespace vabalas_api.Models
 {
     public class Review
     {
-        public int Id { get; set; }
+        public Guid Id { get; set; }
         
         [Required]
-        [ForeignKey("Author")]
-        public int AuthorId { get; set; }
-        public virtual User Author { get; set; }
+        [ForeignKey("VabalasUser")]
+        public string AuthorId { get; set; }
+        
+        public virtual VabalasUser Author { get; set; }
+        
+        [Required]
+        [ForeignKey("Job")]
+        public Guid JobId { get; set; }
+        
         public virtual Job Job { get; set; }
+        
         public string Title { get; set; }
+        
         public string Description { get; set; }
         
         public decimal Rating { get; set; }

@@ -11,5 +11,5 @@ public interface IStatisticsService
 
     Task<List<CategoryDistributionDto>> GetCategoryDistribution();
 
-    Task<List<Job>> GetBestRatedJobs();
+    // Task<List<Job>> GetBestRatedJobs();
 }
