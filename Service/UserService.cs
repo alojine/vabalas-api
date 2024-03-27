@@ -1,5 +1,4 @@
-﻿using vabalas_api.Controllers.Auth.Dtos;
-using vabalas_api.Controllers.User;
+﻿using vabalas_api.Controllers.User;
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
 
@@ -36,25 +35,6 @@ public class UserService : IUserService
         {
             throw new NotFoundException($"User with email: {email} is not found.");
         }
-
-        return user;
-    }
-
-    public async Task<User> Register(UserRegisterDto userDto)
-    {
-        var passwordHash = BCrypt.Net.BCrypt.HashPassword(userDto.Password);
-        var user = new User
-        {
-            Firstname = userDto.Firstname,
-            Lastname = userDto.Lastname,
-            Email = userDto.Email,
-            PasswordHash = passwordHash,
-            CreatedAt = DateTime.UtcNow,
-            UpdatedAt = DateTime.UtcNow
-        };
-        
-        _context.Add(user);
-        await _context.SaveChangesAsync();
 
         return user;
     }

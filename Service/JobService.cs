@@ -7,23 +7,21 @@ namespace vabalas_api.Service.Impl
 {
     public class JobService : IJobService
     {
-        private readonly DataContext _context;
-        private readonly IUserService _userService;
+        private readonly DataContext _data;
 
-        public JobService(DataContext context, IUserService userService)
+        public JobService(DataContext data)
         {
-            _context = context;
-            _userService = userService;
+            _data = data;
         }
         
         public async Task<IEnumerable<Job>> GetAll()
         {
-            return await _context.Job.ToListAsync();
+            return await _data.Job.ToListAsync();
         }
         
-        public async Task<Job> GetById(int jobId)
+        public async Task<Job> GetJobById(int jobId)
         {
-            var job = await _context.Job.FindAsync(jobId);
+            var job = await _data.Job.FindAsync(jobId);
             if (job == null)
             {
                 throw new NotFoundException($"Job with id: {jobId} was not found.");
@@ -32,21 +30,18 @@ namespace vabalas_api.Service.Impl
             return job;
         }
         
-        public async Task<List<Job>> GetAllByUserId(int userId)
+        public async Task<List<Job>> GetAllByUserId(string userId)
         {
-            var user = await _userService.GetById(userId);
-            return await _context.Job.Where(j => j.User == user).ToListAsync();
+            return await _data.Job.Where(j => j.UserId == userId).ToListAsync();
         }
 
         public async Task<List<Job>> GetAllByCategory(JobCategory jobCategory)
         {
-            return await _context.Job.Where(j => j.Category == jobCategory).ToListAsync();
+            return await _data.Job.Where(j => j.Category == jobCategory).ToListAsync();
         }
 
-        public async Task<Job> Add(JobAddDto jobDto)
+        public async Task<Job> AddJob(JobAddDto jobDto, String userId)
         {
-
-            var user = await _userService.GetById(jobDto.UserId);
             var job = new Job();
 
             job.Title = jobDto.Title;
@@ -56,38 +51,56 @@ namespace vabalas_api.Service.Impl
             job.Price = jobDto.Price;
             job.createdAt = DateTime.UtcNow;
             job.updatedAt = DateTime.UtcNow;
-            job.User = user;
+            job.UserId = userId;
             
-            _context.Job.Add(job);
-            await _context.SaveChangesAsync();
+            _data.Job.Add(job);
+            await _data.SaveChangesAsync();
+            return job;
+        }
+        
+        public async Task<Job> UpdateJob(JobUpdateDto jobDto, String userId)
+        {
+            var job = _data.Job.FirstOrDefault(j => j.Id == jobDto.Id);
+
+            if (job == null)
+            {
+                throw new NotFoundException("Job was not found");
+            }
+
+            if (job.UserId != userId)
+            {
+                throw new NotValidException("Only job owner can delete the job");
+            }
+            
+            job.Title = jobDto.Title;
+            job.Description = jobDto.Description;
+            job.PhoneNumber = jobDto.PhoneNumber;
+            job.Price = jobDto.Price;
+            job.Category = JobCatogryParser.ToEnum(jobDto.Category);
+            job.updatedAt = DateTime.UtcNow;
+        
+            _data.Job.Update(job);
+            await _data.SaveChangesAsync();
             return job;
         }
 
-        public async Task<bool> Delete(int jobId)
+        public async Task<bool> DeleteJob(int jobId, String userId)
         {
-            var job = await GetById(jobId);
-            
-            _context.Job.Remove(job);
-            await _context.SaveChangesAsync();
+            var job = _data.Job.FirstOrDefault(j => j.Id == jobId);
+            if (job == null)
+            {
+                throw new NotFoundException("Job was not found");
+            }
+
+            if (job.UserId != userId)
+            {
+                throw new NotValidException("Only job owner can delete the job");
+            }
+
+            _data.Job.Remove(job);
+            await _data.SaveChangesAsync();
             
             return true;
-        }
-
-        public async Task<Job> Update(JobUpdateDto jobUpdateDto)
-        {
-            var job = await GetById(jobUpdateDto.Id);
-            
-            job.Title = jobUpdateDto.Title;
-            job.Description = jobUpdateDto.Description;
-            job.PhoneNumber = jobUpdateDto.PhoneNumber;
-            job.User = await _userService.GetById(jobUpdateDto.UserId);
-            job.Price = jobUpdateDto.Price;
-            job.Category = JobCatogryParser.ToEnum(jobUpdateDto.Category);
-            job.updatedAt = DateTime.UtcNow;
-
-            _context.Job.Update(job);
-            await _context.SaveChangesAsync();
-            return job;
         }
     }
 }

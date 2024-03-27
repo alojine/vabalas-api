@@ -22,10 +22,10 @@ namespace vabalas_api.Controllers.Review
             return Ok(await _reviewService.GetAll());
         }
         [HttpPost]
-        public async Task<ActionResult<Models.Review>> add(ReviewAddDto reviewDto)
-        {
-            return Ok(await _reviewService.Add(reviewDto));
-        }
+        // public async Task<ActionResult<Models.Review>> add(ReviewAddDto reviewDto)
+        // {
+        //     return Ok(await _reviewService.Add(reviewDto));
+        // }
         [HttpDelete("{reviewId}")]
         public async Task<ActionResult<Models.Review>> delete(int reviewId)
         {

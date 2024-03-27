@@ -2,6 +2,7 @@
 using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using vabalas_api.Data;
 
@@ -10,9 +11,11 @@ using vabalas_api.Data;
 namespace vabalas_api.Migrations
 {
     [DbContext(typeof(DataContext))]
-    partial class DataContextModelSnapshot : ModelSnapshot
+    [Migration("20240321215853_RemovePasswordHashFromVabalasUser")]
+    partial class RemovePasswordHashFromVabalasUser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -43,11 +46,7 @@ namespace vabalas_api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("UserId1")
+                    b.Property<int>("UserId")
                         .HasColumnType("int");
 
                     b.Property<DateTime>("createdAt")
@@ -58,7 +57,7 @@ namespace vabalas_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("UserId");
 
                     b.ToTable("Job");
                 });
@@ -240,9 +239,13 @@ namespace vabalas_api.Migrations
 
             modelBuilder.Entity("vabalas_api.Models.Job", b =>
                 {
-                    b.HasOne("vabalas_api.Models.User", null)
+                    b.HasOne("vabalas_api.Models.User", "User")
                         .WithMany("Jobs")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("UserId")
+                        .OnDelete(DeleteBehavior.Restrict)
+                        .IsRequired();
+
+                    b.Navigation("User");
                 });
 
             modelBuilder.Entity("vabalas_api.Models.JobOffer", b =>

@@ -5,7 +5,7 @@ namespace vabalas_api.Service
 {
     public interface IReviewService
     {
-        Task<Review> Add(ReviewAddDto reviewDto);
+        // Task<Review> Add(ReviewAddDto reviewDto);
         Task<IEnumerable<Review>> GetAll();
 
         Task<bool> Delete(int reviewId);

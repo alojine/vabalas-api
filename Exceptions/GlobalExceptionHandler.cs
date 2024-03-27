@@ -5,7 +5,7 @@ using Newtonsoft.Json;
 
 namespace vabalas_api.Exceptions;
 
-public class ExceptionHandler
+public class GlobalExceptionHandler
 {
     public static async Task InvokeAsync(HttpContext context)
     {

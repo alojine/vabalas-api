@@ -38,22 +38,22 @@ namespace vabalas_api.Service.Impl
             return await _context.Reviews.Where(r => r.Job.Id == jobId).ToListAsync();
         }
 
-        public async Task<Review> Add(ReviewAddDto reviewDto)
-        {
-            var review = new Review();
-            
-            review.Author = await _userService.GetById(reviewDto.AuthorId);
-            review.Job = await _jobRepository.GetById(reviewDto.JobId);
-            review.Title = reviewDto.Title;
-            review.Description = reviewDto.Description;
-            review.Rating = reviewDto.Rating;
-            review.CreatedAt = DateTime.Now;
-            review.UpdatedAt = DateTime.Now;
-
-            _context.Reviews.Add(review);
-            await _context.SaveChangesAsync();
-            return review;
-        }
+        // public async Task<Review> Add(ReviewAddDto reviewDto)
+        // {
+        //     var review = new Review();
+        //     
+        //     review.Author = await _userService.GetById(reviewDto.AuthorId);
+        //     review.Job = await _jobRepository.GetById(reviewDto.JobId);
+        //     review.Title = reviewDto.Title;
+        //     review.Description = reviewDto.Description;
+        //     review.Rating = reviewDto.Rating;
+        //     review.CreatedAt = DateTime.Now;
+        //     review.UpdatedAt = DateTime.Now;
+        //
+        //     _context.Reviews.Add(review);
+        //     await _context.SaveChangesAsync();
+        //     return review;
+        // }
 
         public async Task<bool> Delete(int reviewId)
         {
