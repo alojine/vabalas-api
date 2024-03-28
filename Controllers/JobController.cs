@@ -3,8 +3,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Controllers.Job.Dtos;
 using vabalas_api.Enums;
-using vabalas_api.Models;
 using vabalas_api.Service;
+using vabalas_api.Utils;
 
 namespace vabalas_api.Controllers
 {
@@ -20,12 +20,6 @@ namespace vabalas_api.Controllers
             _jobService = jobService;
         }
         
-        [HttpGet]
-        public async Task<IActionResult> GetAll()
-        {
-            return Ok(await _jobService.GetAll());
-        }
-        
         [HttpGet("{jobId}")]
         public async Task<ActionResult<Models.Job>> GetById(Guid jobId)
         {
@@ -36,8 +30,16 @@ namespace vabalas_api.Controllers
         [HttpGet("User/{userId}")]
         public async Task<ActionResult<List<Models.Job>>> GetAllByUserId()
         {
-            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Ok(await _jobService.GetAllByUserId(userId));
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var jobs = await _jobService.GetAllByUserId(userId);
+            return Ok(MapJobListToJobResponseDto(jobs).ToList());
+        }
+        
+        [HttpGet]
+        public async Task<IActionResult> GetAll()
+        {
+            var jobs = await _jobService.GetAll();
+            return Ok(MapJobListToJobResponseDto(jobs.ToList()));
         }
 
         [HttpPost]
@@ -63,7 +65,7 @@ namespace vabalas_api.Controllers
             return Ok(await _jobService.DeleteJob(jobId, userId));
         }
 
-        private JobResponseDto MapJobToJobResponseDto(Models.Job job)
+        private static JobResponseDto MapJobToJobResponseDto(Models.Job job)
         {
             return new JobResponseDto
             {
@@ -71,9 +73,14 @@ namespace vabalas_api.Controllers
                 Title = job.Title,
                 Description = job.Description,
                 Category = JobCatogryParser.ToString(job.Category),
-                Price = job.Price,
+                Price = DecimalHelper.RoundToTwoDecimals(job.Price),
                 PhoneNumber = job.PhoneNumber
             };
+        }
+
+        private static List<JobResponseDto> MapJobListToJobResponseDto(List<Models.Job> jobs)
+        {
+            return jobs.Select(j => MapJobToJobResponseDto(j)).ToList();
         }
                 
     }
