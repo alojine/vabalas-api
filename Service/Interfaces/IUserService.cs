@@ -6,13 +6,13 @@ namespace vabalas_api.Service;
 public interface IUserService
 {
 
-    Task<List<User>> GetAll();
+    Task<List<VabalasUser>> GetAll();
 
-    Task<User> GetByEmail(string email);
+    Task<VabalasUser> GetByEmail(string email);
 
-    Task<User> GetById(int userId);
+    Task<VabalasUser> GetById(int userId);
 
-    Task<User> Update(UserUpdateDto userDto);
+    Task<VabalasUser> Update(UserUpdateDto userDto);
 
     Task<bool> Delete(int userId);
 }

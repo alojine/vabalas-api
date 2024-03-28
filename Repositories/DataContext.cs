@@ -8,8 +8,6 @@ namespace vabalas_api.Data
     {
         public DataContext(DbContextOptions<DataContext> options) : base(options) { }
         
-        public DbSet<User> Users { get; set; }
-        
         public DbSet<Job> Job { get; set; }
         
         public DbSet<Review> Reviews { get; set; }
@@ -20,10 +18,10 @@ namespace vabalas_api.Data
         
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<VabalasUser>(ConfigureVabalasUser);
             modelBuilder.Entity<Job>(ConfigureJob);
             modelBuilder.Entity<JobOffer>(ConfigureJobOffer);
             modelBuilder.Entity<Review>(ConfigureReview);
-            modelBuilder.Entity<VabalasUser>(ConfigureVabalasUser);
         }
 
         private void ConfigureJob(EntityTypeBuilder<Job> builder)

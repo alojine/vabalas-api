@@ -13,14 +13,14 @@ public class UserService : IUserService
         _context = context;
     }
     
-    public async Task<List<User>> GetAll()
+    public async Task<List<VabalasUser>> GetAll()
     {
-        return await _context.Users.ToListAsync();
+        return await _context.VabalasUsers.ToListAsync();
     }
     
-    public async Task<User> GetById(int userId)
+    public async Task<VabalasUser> GetById(int userId)
     {
-        var user = await _context.Users.FindAsync(userId);
+        var user = await _context.VabalasUsers.FindAsync(userId);
         if (user == null)
         {
             throw new NotFoundException($"User with id: {userId} is not found.");
@@ -28,9 +28,9 @@ public class UserService : IUserService
         return user;
     }
     
-    public async Task<User> GetByEmail(string email)
+    public async Task<VabalasUser> GetByEmail(string email)
     {
-        var user = await _context.Users.FirstOrDefaultAsync(u => u.Email == email);
+        var user = await _context.VabalasUsers.FirstOrDefaultAsync(u => u.Email == email);
         if (user == null)
         {
             throw new NotFoundException($"User with email: {email} is not found.");
@@ -39,15 +39,15 @@ public class UserService : IUserService
         return user;
     }
 
-    public async Task<User> Update(UserUpdateDto userDto)
+    public async Task<VabalasUser> Update(UserUpdateDto userDto)
     {
         var user = await GetById(userDto.Id);
 
-        user.Firstname = userDto.Firstname;
-        user.Lastname = userDto.Lastname;
+        user.FirstName = userDto.Firstname;
+        user.LastName = userDto.Lastname;
         user.UpdatedAt = DateTime.Now;
 
-        _context.Users.Update(user);
+        _context.VabalasUsers.Update(user);
         await _context.SaveChangesAsync();
         return user;
     }
@@ -56,7 +56,7 @@ public class UserService : IUserService
     {
         var user = await GetById(userId);
 
-        _context.Users.Remove(user);
+        _context.VabalasUsers.Remove(user);
         await _context.SaveChangesAsync();
 
         return true;

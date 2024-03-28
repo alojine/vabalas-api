@@ -24,6 +24,20 @@ static class JobCatogryParser
 
         return jobCategory;
     }
+
+    public static String ToString(JobCategory jobCategory)
+    {
+        var category = jobCategory switch
+        {
+            JobCategory.Construction => "Construction",
+            JobCategory.Gardening => "Gardening",
+            JobCategory.Vehicles => "Vehicles",
+            JobCategory.Technology => "Technology",
+            _ => "Other"
+        };
+
+        return category;
+    }
 }
 
 

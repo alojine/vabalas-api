@@ -64,7 +64,6 @@ namespace vabalas_api
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             
             // Services
-            builder.Services.AddScoped<IJwtService, JwtService>();
             builder.Services.AddScoped<IJobService, JobService>();
             builder.Services.AddScoped<IStatisticsService, StatisticsService>();
             builder.Services.AddScoped<IUserService,UserService>();

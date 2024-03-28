@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations.Schema;
+﻿using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 using vabalas_api.Enums;
 
@@ -8,6 +9,7 @@ namespace vabalas_api.Models
     {
         public Guid Id { get; set; }
         
+        [Required]
         [ForeignKey("VabalasUser")]
         public String OwnerId { get; set; }
         
@@ -27,6 +29,9 @@ namespace vabalas_api.Models
         public DateTime createdAt { get; set; }
         
         public DateTime updatedAt { get; set; }
+        
+        [JsonIgnore]
+        public virtual ICollection<Job> Jobs { get; set; }
         
         [JsonIgnore]
         public virtual ICollection<JobOffer> JobOffers { get; set; }

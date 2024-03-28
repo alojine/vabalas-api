@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Controllers.Job.Dtos;
+using vabalas_api.Enums;
 using vabalas_api.Models;
 using vabalas_api.Service;
 
@@ -28,7 +29,8 @@ namespace vabalas_api.Controllers
         [HttpGet("{jobId}")]
         public async Task<ActionResult<Models.Job>> GetById(Guid jobId)
         {
-            return Ok(await _jobService.GetJobById(jobId));
+            var job = await _jobService.GetJobById(jobId);
+            return Ok(MapJobToJobResponseDto(job));
         }
 
         [HttpGet("User/{userId}")]
@@ -42,14 +44,16 @@ namespace vabalas_api.Controllers
         public async Task<ActionResult<Models.Job>> CreateJob(JobAddRequestDto jobAddDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
-            return Ok(await _jobService.AddJob(jobAddDto, userId));
+            var job = await _jobService.AddJob(jobAddDto, userId);
+            return Ok(MapJobToJobResponseDto(job));
         }
         
         [HttpPut]
         public async Task<ActionResult<Models.Job>> UpdateJob(JobUpdateRequestDto jobRequestDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Ok(await _jobService.UpdateJob(jobRequestDto, userId));
+            var job = await _jobService.UpdateJob(jobRequestDto, userId);
+            return Ok(MapJobToJobResponseDto(job));
         }
 
         [HttpDelete("{jobId}")]
@@ -59,12 +63,18 @@ namespace vabalas_api.Controllers
             return Ok(await _jobService.DeleteJob(jobId, userId));
         }
 
-        // private JobResponseDto MapJobToJobResponseDto(Job job)
-        // {
-        //     return new JobResponseDto
-        //     {
-        //         
-        //     }
-        // }
+        private JobResponseDto MapJobToJobResponseDto(Models.Job job)
+        {
+            return new JobResponseDto
+            {
+                JobId = job.Id,
+                Title = job.Title,
+                Description = job.Description,
+                Category = JobCatogryParser.ToString(job.Category),
+                Price = job.Price,
+                PhoneNumber = job.PhoneNumber
+            };
+        }
+                
     }
 }
