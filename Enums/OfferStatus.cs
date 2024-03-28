@@ -22,4 +22,17 @@ static class OfferStatusParser
 
         return offerStatus;
     }
+
+    public static string ToString(OfferStatus status)
+    {
+        var offerStatus = status switch
+        {
+            OfferStatus.Pending => "Pending",
+            OfferStatus.Accepted => "Accepted",
+            OfferStatus.Declined => "Declined",
+            _ => "Deprecated"
+        };
+
+        return offerStatus;
+    }
 }
