@@ -1,10 +1,13 @@
-﻿using System.Web.Http;
+﻿using System.Security.Claims;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using vabalas_api.Controllers.JobOffer.Dtos;
+using vabalas_api.Dtos;
+using vabalas_api.DTOs;
 using vabalas_api.Enums;
 using vabalas_api.Service;
+using vabalas_api.Models;
 
-namespace vabalas_api.Controllers.JobOffer
+namespace vabalas_api.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
@@ -18,63 +21,61 @@ namespace vabalas_api.Controllers.JobOffer
             _jobOfferService = jobOfferService;
         }
         
-        [Microsoft.AspNetCore.Mvc.HttpGet]
+        [HttpGet]
         public async Task<IActionResult> GetAll()
         {
             var jobOffers = await _jobOfferService.GetAll();
-            return Ok(JobOfferListToJobOfferResponseDtoList(jobOffers.ToList()));
+            return Ok(OfferListToDtoList(jobOffers));
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpGet("{offerId}")]
-        public async Task<IActionResult> GetById(int offerId)
+        [HttpGet("{offerId}")]
+        public async Task<IActionResult> GetById(Guid offerId)
         {
-            var job = await _jobOfferService.GetById(offerId);
-            return Ok(JobOfferToJobOfferResponseDto(job));
-        }
-        
-        [Microsoft.AspNetCore.Mvc.HttpGet("{status}")]
-        public async Task<IActionResult> GetAllByStatus(string status)
-        {
-            var jobs = await _jobOfferService.get
+            var jobOffer = await _jobOfferService.GetById(offerId);
+            return Ok(OfferToDto(jobOffer));
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpGet("{userId}/{status}/")]
-        public async Task<IActionResult> GetByStatus(string userId, string status)
+        [HttpGet("{status}")]
+        public async Task<IActionResult> GetByStatus(string status)
         {
-            return Ok(await _jobOfferService.GetAllByUserIdAndStatus(userId, status));
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
+            var jobOffers = await _jobOfferService.GetAllByUserAndStatus(userId, status);
+            return Ok(OfferListToDtoList(jobOffers.ToList()));
         }
         
-        [Microsoft.AspNetCore.Mvc.HttpGet("job-owner/{userId}")]
-        public async Task<ActionResult<List<Models.Job>>> GetJobById(int userId)
+        [HttpGet("owner")]
+        public async Task<ActionResult> GetJobOfferById()
         {
+            var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             return Ok(await _jobOfferService.GetAllByUserId(userId));
         }
 
-        [Microsoft.AspNetCore.Mvc.HttpPost]
-        public async Task<ActionResult<Models.JobOffer>> SendOffer(JobOfferRequestDto offerRequestDto)
+        [HttpPost]
+        public async Task<ActionResult> SendOffer(JobOfferRequestDto offerRequestDto)
         {
             return Ok(await _jobOfferService.SendOffer(offerRequestDto));
         }
         
-        [Microsoft.AspNetCore.Mvc.HttpPut]
-        public async Task<ActionResult<Models.JobOffer>> UpdateJobOffer(JobOfferRequestDto offerRequestDto)
+        [HttpPut]
+        public async Task<ActionResult> UpdateJobOffer(JobOfferRequestDto offerRequestDto)
         {
-            return Ok(await _jobOfferService.Update(offerRequestDto));
+            var jobOffer = await _jobOfferService.Update(offerRequestDto);
+            return Ok(OfferToDto(jobOffer));
         }
         
-        [Microsoft.AspNetCore.Mvc.HttpPut("respond/{offerId}/{status}/")]
-        public async Task<IActionResult> RespondToOffer(int offerId, string status)
+        [HttpPut("respond/{offerId}/{status}/")]
+        public async Task<IActionResult> RespondToOffer(Guid offerId, string status)
         {
             return Ok(await _jobOfferService.RespondToOffer(offerId, status));
         }
         
-        [Microsoft.AspNetCore.Mvc.HttpDelete("{offerId}")]
-        public async Task<ActionResult<Models.JobOffer>> Delete(int offerId)
+        [HttpDelete("{offerId}")]
+        public async Task<ActionResult> Delete(Guid offerId)
         {
             return Ok(await _jobOfferService.Delete(offerId));
         }
 
-        private static JobOfferResponseDto JobOfferToJobOfferResponseDto(Models.JobOffer jobOffer)
+        private static JobOfferResponseDto OfferToDto(JobOffer jobOffer)
         {
             return new JobOfferResponseDto
             {
@@ -86,9 +87,9 @@ namespace vabalas_api.Controllers.JobOffer
             };
         }
 
-        private static List<JobOfferResponseDto> JobOfferListToJobOfferResponseDtoList(List<Models.JobOffer> jobOffers)
+        private static List<JobOfferResponseDto> OfferListToDtoList(List<JobOffer> jobOffers)
         {
-            return jobOffers.Select(jo => JobOfferToJobOfferResponseDto(jo)).ToList();
+            return jobOffers.Select(jo => OfferToDto(jo)).ToList();
         } 
     }
 }

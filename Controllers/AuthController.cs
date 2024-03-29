@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
+using vabalas_api.DTOs;
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
 using vabalas_api.Service.Jwt;

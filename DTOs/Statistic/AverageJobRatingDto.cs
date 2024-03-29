@@ -1,6 +1,6 @@
 ﻿using vabalas_api.Models;
 
-namespace vabalas_api.Service.Impl;
+namespace vabalas_api.DTOs;
 
 public class AverageJobRatingDto
 {

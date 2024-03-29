@@ -1,6 +1,6 @@
 ﻿using vabalas_api.Enums;
 
-namespace vabalas_api.Controllers.Statistics;
+namespace vabalas_api.DTOs;
 
 public class CategoryDistributionDto
 {

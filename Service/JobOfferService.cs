@@ -1,9 +1,9 @@
-﻿using vabalas_api.Controllers.JobOffer.Dtos;
+﻿using vabalas_api.DTOs;
 using vabalas_api.Enums;
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
 
-namespace vabalas_api.Service.Impl
+namespace vabalas_api.Service
 {
     public class JobOfferService : IJobOfferService
     {
@@ -18,7 +18,7 @@ namespace vabalas_api.Service.Impl
             _jobService = jobService;
         }
         
-        public async Task<IEnumerable<JobOffer>> GetAll()
+        public async Task<List<JobOffer>> GetAll()
         {
             return await _context.JobOffers.ToListAsync();
         }
@@ -46,7 +46,7 @@ namespace vabalas_api.Service.Impl
             return jobOfferList;
         }
         
-        public async Task<IEnumerable<JobOffer>> GetAllByStatus(string userId, string status)
+        public async Task<IEnumerable<JobOffer>> GetAllByUserAndStatus(string userId, string status)
         {
             var user = await _userService.GetById(userId);
             
@@ -55,24 +55,24 @@ namespace vabalas_api.Service.Impl
                 .ToListAsync();
         }
         
-        public async Task<JobOffer> SendOffer(JobOfferDto offerDto)
+        public async Task<JobOffer> SendOffer(JobOfferRequestDto offerDto)
         {
             var offer = new JobOffer();
             var client = await _userService.GetByEmail(offerDto.CustomerEmail);
-            var job = await _jobService.GetById(offerDto.JobId);
+            var job = await _jobService.GetJobById(offerDto.JobId);
             
-            if (client.Id == job.UserId)
+            if (client.Id == job.Owner.Id)
             {
-                throw new NotValidException($"Cannot create offer where user with id:{client.Id} is client and job owner.");
+                throw new NotValidException($"Cannot create offer where user with id: {client.Id} is client and job owner.");
             } 
             if (offerDto.JobDate < DateTime.Now.AddHours(1))
             {
                 throw new NotSupportedException(
-                    $"Offer with client id:{client.Id} cannot be offered less than 1 hour from current time.");
+                    $"Offer with client id: {client.Id} cannot be offered less than 1 hour from current time.");
             }
-
-            offer.Client = client;
-            offer.Job = await _jobService.GetById(offerDto.JobId);
+            
+            offer.SenderId = client.Id;
+            offer.Job = await _jobService.GetJobById(offerDto.JobId);
             offer.OfferStatus = OfferStatus.Pending;
             offer.Description = offerDto.Description;
             offer.JobDate = offerDto.JobDate;
@@ -85,7 +85,7 @@ namespace vabalas_api.Service.Impl
             return offer;
         }
 
-        public async Task<JobOffer> RespondToOffer(int offerId, string status)
+        public async Task<JobOffer> RespondToOffer(Guid offerId, string status)
         {
             var offer = await GetById(offerId);
             offer.OfferStatus = OfferStatusParser.ToEnum(status);
@@ -95,12 +95,12 @@ namespace vabalas_api.Service.Impl
             return offer;
         }
         
-        public async Task<JobOffer> Update(JobOfferDto offerDto)
+        public async Task<JobOffer> Update(JobOfferRequestDto offerDto)
         {
             var offer = await GetById(offerDto.JobId);
             
             // possible to change description and date only
-            offer.Description = offerDto.Description;
+            offer.Description = offerDto.Description!;
             offer.JobDate = offerDto.JobDate;
             offer.UpdatedAt = DateTime.Now;
             
@@ -109,12 +109,13 @@ namespace vabalas_api.Service.Impl
             return offer;
         }
         
-        public async Task<bool> Delete (int offerId)
+        public async Task<bool> Delete (Guid offerId)
         {
             var offer = await GetById(offerId);
 
             _context.JobOffers.Remove(offer);
             await _context.SaveChangesAsync();
+            
             return true;
         }
     }

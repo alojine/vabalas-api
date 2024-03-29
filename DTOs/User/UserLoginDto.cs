@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace vabalas_api.Controllers;
+namespace vabalas_api.DTOs;
 
 public class UserLoginDto
 {

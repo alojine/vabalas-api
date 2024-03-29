@@ -1,4 +1,4 @@
-﻿namespace vabalas_api.Controllers.Review.Dtos
+﻿namespace vabalas_api.DTOs
 {
     public class ReviewAddDto
     {

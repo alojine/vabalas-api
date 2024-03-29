@@ -1,10 +1,9 @@
-﻿namespace vabalas_api.Controllers.JobOffer.Dtos
+﻿namespace vabalas_api.DTOs
 {
     public class JobOfferRequestDto
     {
-        public int Id { get; set; }
         public string? CustomerEmail { get; set; }
-        public int JobId { get; set; }
+        public Guid JobId { get; set; }
         public string? Status { get; set; }
         public string? Description {  get; set; }
         public DateTime JobDate { get; set; } 

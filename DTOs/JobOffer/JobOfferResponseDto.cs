@@ -1,4 +1,4 @@
-namespace vabalas_api.Controllers.JobOffer.Dtos;
+namespace vabalas_api.Dtos;
 
 public class JobOfferResponseDto
 {

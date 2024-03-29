@@ -1,5 +1,4 @@
-﻿using vabalas_api.Controllers.Review.Dtos;
-using vabalas_api.Models;
+﻿using vabalas_api.Models;
 
 namespace vabalas_api.Service
 {

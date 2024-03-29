@@ -1,9 +1,8 @@
-﻿using vabalas_api.Controllers.Statistics;
+﻿using vabalas_api.DTOs;
 using vabalas_api.Enums;
-using vabalas_api.Models;
 using vabalas_api.Utils;
 
-namespace vabalas_api.Service.Impl;
+namespace vabalas_api.Service;
 
 public class StatisticsService : IStatisticsService
 {

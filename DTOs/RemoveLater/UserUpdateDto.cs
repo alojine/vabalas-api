@@ -1,4 +1,4 @@
-﻿namespace vabalas_api.Controllers.User;
+﻿namespace vabalas_api.DTOs;
 
 public class UserUpdateDto
 {

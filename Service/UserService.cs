@@ -1,5 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
-using vabalas_api.Controllers.User;
+using vabalas_api.DTOs;
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
 
