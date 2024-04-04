@@ -1,4 +1,4 @@
-﻿using vabalas_api.Controllers.Statistics;
+﻿using vabalas_api.DTOs;
 using vabalas_api.Models;
 
 namespace vabalas_api.Service;

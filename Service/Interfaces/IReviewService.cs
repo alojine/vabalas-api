@@ -1,15 +1,14 @@
-﻿using vabalas_api.Controllers.Review.Dtos;
+﻿using vabalas_api.DTOs;
 using vabalas_api.Models;
 
 namespace vabalas_api.Service
 {
     public interface IReviewService
     {
-        // Task<Review> Add(ReviewAddDto reviewDto);
+        Task<Review> Add(ReviewRequestDto reviewDto);
         Task<IEnumerable<Review>> GetAll();
-
-        Task<bool> Delete(int reviewId);
-
-        Task<List<Review>> GetAllByJobId(int jobId);
+        Task<Review> GetReviewById(Guid reviewId);
+        Task<List<Review>> GetAllByJobId(Guid jobId);
+        Task<bool> Delete(Guid reviewId);
     }
 }

@@ -21,9 +21,9 @@ namespace vabalas_api.Migrations
 
             modelBuilder.Entity("vabalas_api.Models.Job", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("Category")
                         .HasColumnType("int");
@@ -31,6 +31,13 @@ namespace vabalas_api.Migrations
                     b.Property<string>("Description")
                         .IsRequired()
                         .HasColumnType("longtext");
+
+                    b.Property<Guid?>("JobId")
+                        .HasColumnType("char(36)");
+
+                    b.Property<string>("OwnerId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<string>("PhoneNumber")
                         .IsRequired()
@@ -43,13 +50,6 @@ namespace vabalas_api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<string>("UserId")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<int?>("UserId1")
-                        .HasColumnType("int");
-
                     b.Property<DateTime>("createdAt")
                         .HasColumnType("datetime(6)");
 
@@ -58,19 +58,18 @@ namespace vabalas_api.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("UserId1");
+                    b.HasIndex("JobId");
+
+                    b.HasIndex("OwnerId");
 
                     b.ToTable("Job");
                 });
 
             modelBuilder.Entity("vabalas_api.Models.JobOffer", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<int>("ClientId")
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
@@ -82,32 +81,42 @@ namespace vabalas_api.Migrations
                     b.Property<DateTime>("JobDate")
                         .HasColumnType("datetime(6)");
 
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("char(36)");
 
                     b.Property<int>("OfferStatus")
                         .HasColumnType("int");
 
+                    b.Property<string>("SenderId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
+
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("VabalasUserId")
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
 
-                    b.HasIndex("ClientId");
-
                     b.HasIndex("JobId");
+
+                    b.HasIndex("SenderId");
+
+                    b.HasIndex("VabalasUserId");
 
                     b.ToTable("JobOffers");
                 });
 
             modelBuilder.Entity("vabalas_api.Models.Review", b =>
                 {
-                    b.Property<int>("Id")
+                    b.Property<Guid>("Id")
                         .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
+                        .HasColumnType("char(36)");
 
-                    b.Property<int>("AuthorId")
-                        .HasColumnType("int");
+                    b.Property<string>("AuthorId")
+                        .IsRequired()
+                        .HasColumnType("varchar(255)");
 
                     b.Property<DateTime>("CreatedAt")
                         .HasColumnType("datetime(6)");
@@ -116,8 +125,8 @@ namespace vabalas_api.Migrations
                         .IsRequired()
                         .HasColumnType("longtext");
 
-                    b.Property<int>("JobId")
-                        .HasColumnType("int");
+                    b.Property<Guid>("JobId")
+                        .HasColumnType("char(36)");
 
                     b.Property<decimal>("Rating")
                         .HasColumnType("decimal(65,30)");
@@ -129,46 +138,18 @@ namespace vabalas_api.Migrations
                     b.Property<DateTime>("UpdatedAt")
                         .HasColumnType("datetime(6)");
 
+                    b.Property<string>("VabalasUserId")
+                        .HasColumnType("varchar(255)");
+
                     b.HasKey("Id");
 
                     b.HasIndex("AuthorId");
 
                     b.HasIndex("JobId");
 
+                    b.HasIndex("VabalasUserId");
+
                     b.ToTable("Reviews");
-                });
-
-            modelBuilder.Entity("vabalas_api.Models.User", b =>
-                {
-                    b.Property<int>("Id")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("int");
-
-                    b.Property<DateTime>("CreatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.Property<string>("Email")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Firstname")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("Lastname")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<string>("PasswordHash")
-                        .IsRequired()
-                        .HasColumnType("longtext");
-
-                    b.Property<DateTime>("UpdatedAt")
-                        .HasColumnType("datetime(6)");
-
-                    b.HasKey("Id");
-
-                    b.ToTable("Users");
                 });
 
             modelBuilder.Entity("vabalas_api.Models.VabalasUser", b =>
@@ -240,50 +221,75 @@ namespace vabalas_api.Migrations
 
             modelBuilder.Entity("vabalas_api.Models.Job", b =>
                 {
-                    b.HasOne("vabalas_api.Models.User", null)
+                    b.HasOne("vabalas_api.Models.Job", null)
                         .WithMany("Jobs")
-                        .HasForeignKey("UserId1");
+                        .HasForeignKey("JobId");
+
+                    b.HasOne("vabalas_api.Models.VabalasUser", "Owner")
+                        .WithMany("Jobs")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("vabalas_api.Models.JobOffer", b =>
                 {
-                    b.HasOne("vabalas_api.Models.User", "Client")
-                        .WithMany("JobOffers")
-                        .HasForeignKey("ClientId")
-                        .OnDelete(DeleteBehavior.Restrict)
-                        .IsRequired();
-
                     b.HasOne("vabalas_api.Models.Job", "Job")
-                        .WithMany()
+                        .WithMany("JobOffers")
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.Navigation("Client");
+                    b.HasOne("vabalas_api.Models.VabalasUser", "Sender")
+                        .WithMany()
+                        .HasForeignKey("SenderId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.HasOne("vabalas_api.Models.VabalasUser", null)
+                        .WithMany("JobOffers")
+                        .HasForeignKey("VabalasUserId");
 
                     b.Navigation("Job");
+
+                    b.Navigation("Sender");
                 });
 
             modelBuilder.Entity("vabalas_api.Models.Review", b =>
                 {
-                    b.HasOne("vabalas_api.Models.User", "Author")
-                        .WithMany("Reviews")
+                    b.HasOne("vabalas_api.Models.VabalasUser", "Author")
+                        .WithMany()
                         .HasForeignKey("AuthorId")
-                        .OnDelete(DeleteBehavior.Restrict)
+                        .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.HasOne("vabalas_api.Models.Job", "Job")
-                        .WithMany()
+                        .WithMany("Reviews")
                         .HasForeignKey("JobId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
+
+                    b.HasOne("vabalas_api.Models.VabalasUser", null)
+                        .WithMany("Reviews")
+                        .HasForeignKey("VabalasUserId");
 
                     b.Navigation("Author");
 
                     b.Navigation("Job");
                 });
 
-            modelBuilder.Entity("vabalas_api.Models.User", b =>
+            modelBuilder.Entity("vabalas_api.Models.Job", b =>
+                {
+                    b.Navigation("JobOffers");
+
+                    b.Navigation("Jobs");
+
+                    b.Navigation("Reviews");
+                });
+
+            modelBuilder.Entity("vabalas_api.Models.VabalasUser", b =>
                 {
                     b.Navigation("JobOffers");
 

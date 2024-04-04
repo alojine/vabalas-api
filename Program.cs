@@ -5,7 +5,6 @@ using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.IdentityModel.Tokens;
 using vabalas_api.Service;
-using vabalas_api.Service.Impl;
 using Microsoft.OpenApi.Models;
 using Swashbuckle.AspNetCore.Filters;
 using vabalas_api.Configs;
@@ -64,12 +63,11 @@ namespace vabalas_api
             builder.Services.AddAutoMapper(typeof(Program).Assembly);
             
             // Services
-            builder.Services.AddScoped<IJwtService, JwtService>();
             builder.Services.AddScoped<IJobService, JobService>();
             builder.Services.AddScoped<IStatisticsService, StatisticsService>();
             builder.Services.AddScoped<IUserService,UserService>();
             builder.Services.AddScoped<IReviewService,ReviewSevice>();
-            // builder.Services.AddScoped<IJobOfferService, JobOfferService>();
+            builder.Services.AddScoped<IJobOfferService, JobOfferService>();
             
             builder.Services.AddSwaggerGen(options =>
             {

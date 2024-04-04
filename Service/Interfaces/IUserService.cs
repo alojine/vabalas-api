@@ -1,18 +1,17 @@
-﻿using vabalas_api.Controllers.User;
+﻿using vabalas_api.DTOs;
 using vabalas_api.Models;
 
 namespace vabalas_api.Service;
 
 public interface IUserService
 {
+    Task<List<VabalasUser>> GetAll();
 
-    Task<List<User>> GetAll();
+    Task<VabalasUser> GetById(string userId);
 
-    Task<User> GetByEmail(string email);
+    Task<VabalasUser> GetByEmail(string email);
 
-    Task<User> GetById(int userId);
+    Task<VabalasUser> Update(UserUpdateDto userDto);
 
-    Task<User> Update(UserUpdateDto userDto);
-
-    Task<bool> Delete(int userId);
+    Task<bool> Delete(string userId);
 }
