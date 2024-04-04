@@ -81,7 +81,7 @@ namespace vabalas_api.Controllers
 
         private static List<JobResponseDto> MapJobListToJobResponseDto(List<Job> jobs)
         {
-            return jobs.Select(j => MapJobToJobResponseDto(j)).ToList();
+            return jobs.Select(MapJobToJobResponseDto).ToList();
         }
                 
     }

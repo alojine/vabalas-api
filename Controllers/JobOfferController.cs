@@ -90,7 +90,7 @@ namespace vabalas_api.Controllers
 
         private static List<JobOfferResponseDto> OfferListToDtoList(List<JobOffer> jobOffers)
         {
-            return jobOffers.Select(jo => OfferToDto(jo)).ToList();
+            return jobOffers.Select(OfferToDto).ToList();
         } 
     }
 }
