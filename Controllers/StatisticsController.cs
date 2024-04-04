@@ -32,9 +32,9 @@ public class StatisticsController : ControllerBase
         return Ok(await _statisticsService.GetCategoryDistribution());
     }
     
-    // [HttpGet("best-jobs")]
-    // public async Task<ActionResult<List<Models.Job>>> GetBestJobs()
-    // {
-    //     return Ok(await _statisticsService.GetBestRatedJobs());
-    // }
+    [HttpGet("best-jobs")]
+    public async Task<ActionResult> GetBestJobs()
+    {
+        return Ok(await _statisticsService.GetBestRatedJobs());
+    }
 }

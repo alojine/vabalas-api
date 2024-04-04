@@ -1,5 +1,6 @@
 ﻿using vabalas_api.DTOs;
 using vabalas_api.Enums;
+using vabalas_api.Models;
 using vabalas_api.Utils;
 
 namespace vabalas_api.Service;
@@ -16,25 +17,25 @@ public class StatisticsService : IStatisticsService
         _reviewService = reviewService;
     }
     
-    // public async Task<List<Job>> GetBestRatedJobs()
-    // {
-    //     var jobs = await _jobService.GetAll();
-    //     
-    //     var jobRatings = new List<AverageJobRatingDto>();
-    //     foreach (var job in jobs)
-    //     {
-    //         var reviews = await _reviewService.GetAllByJobId(job.Id);
-    //         var averageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0;
-    //         
-    //         var jobAverageRatingDto = new AverageJobRatingDto(job, averageRating);
-    //         
-    //         jobRatings.Add(jobAverageRatingDto);
-    //     }
-    //     
-    //     var bestRatedJobs = jobRatings.OrderByDescending(j => j.AverageRating).Select(j => j.Job).ToList();
-    //
-    //     return bestRatedJobs;
-    // }
+    public async Task<List<Job>> GetBestRatedJobs()
+    {
+        var jobs = await _jobService.GetAll();
+        
+        var jobRatings = new List<AverageJobRatingDto>();
+        foreach (var job in jobs)
+        {
+            var reviews = await _reviewService.GetAllByJobId(job.Id);
+            var averageRating = reviews.Any() ? reviews.Average(r => r.Rating) : 0;
+            
+            var jobAverageRatingDto = new AverageJobRatingDto(job, averageRating);
+            
+            jobRatings.Add(jobAverageRatingDto);
+        }
+        
+        var bestRatedJobs = jobRatings.OrderByDescending(j => j.AverageRating).Select(j => j.Job).ToList();
+    
+        return bestRatedJobs;
+    }
 
     public async Task<int> GetTotalAmountOfJobs()
     {
@@ -54,15 +55,13 @@ public class StatisticsService : IStatisticsService
         var totalJobs = await GetTotalAmountOfJobs();
         foreach (JobCategory category in Enum.GetValues(typeof(JobCategory)))
         {
-            var categoryDistributionDto = new CategoryDistributionDto();
-            categoryDistributionDto.JobCategory = category;
-            
             var currentCategoryJobs = (await _jobService.GetAllByCategory(category)).Count;
             
-            categoryDistributionDto.Percentage = currentCategoryJobs != 0
-                ? PercentageHelper.GetPercentage(totalJobs, currentCategoryJobs)
-                : 0;
-            
+            var categoryDistributionDto = new CategoryDistributionDto
+            {
+                JobCategory = category,
+                Percentage = currentCategoryJobs != 0 ? PercentageHelper.GetPercentage(totalJobs, currentCategoryJobs) : 0
+            };
             categoryDistributionList.Add(categoryDistributionDto);
         }
 
