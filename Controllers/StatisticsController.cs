@@ -1,6 +1,4 @@
-﻿using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Mvc;
-using vabalas_api.Mappers;
+﻿using Microsoft.AspNetCore.Mvc;
 using vabalas_api.Service;
 
 namespace vabalas_api.Controllers.Statistics;

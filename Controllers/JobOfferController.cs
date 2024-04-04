@@ -9,7 +9,7 @@ using vabalas_api.Models;
 
 namespace vabalas_api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/job-offers")]
     [ApiController]
     [Authorize]
     public class JobOfferController : ControllerBase
@@ -35,7 +35,7 @@ namespace vabalas_api.Controllers
             return Ok(OfferToDto(jobOffer));
         }
 
-        [HttpGet("{status}")]
+        [HttpGet("status/{status}")]
         public async Task<IActionResult> GetByStatus(string status)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -53,7 +53,8 @@ namespace vabalas_api.Controllers
         [HttpPost]
         public async Task<ActionResult> SendOffer(JobOfferRequestDto offerRequestDto)
         {
-            return Ok(await _jobOfferService.SendOffer(offerRequestDto));
+            await _jobOfferService.SendOffer(offerRequestDto);
+            return Ok();
         }
         
         [HttpPut]
@@ -63,7 +64,7 @@ namespace vabalas_api.Controllers
             return Ok(OfferToDto(jobOffer));
         }
         
-        [HttpPut("respond/{offerId}/{status}/")]
+        [HttpPut("respond/{offerId}/status/{status}")]
         public async Task<IActionResult> RespondToOffer(Guid offerId, string status)
         {
             return Ok(await _jobOfferService.RespondToOffer(offerId, status));

@@ -1,7 +1,7 @@
 ﻿
 using System.ComponentModel.DataAnnotations;
 
-namespace vabalas_api.Controllers.Job.Dtos
+namespace vabalas_api.DTOs
 {
     public class JobAddRequestDto
     {

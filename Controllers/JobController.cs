@@ -1,15 +1,16 @@
 ﻿using System.Security.Claims;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using vabalas_api.Controllers.Job.Dtos;
+using vabalas_api.DTOs;
 using vabalas_api.Enums;
+using vabalas_api.Models;
 using vabalas_api.Service;
 using vabalas_api.Utils;
 
 namespace vabalas_api.Controllers
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/jobs")]
     [ApiController]
     public class JobController : ControllerBase
     {
@@ -21,14 +22,14 @@ namespace vabalas_api.Controllers
         }
         
         [HttpGet("{jobId}")]
-        public async Task<ActionResult<Models.Job>> GetById(Guid jobId)
+        public async Task<ActionResult> GetById(Guid jobId)
         {
             var job = await _jobService.GetJobById(jobId);
             return Ok(MapJobToJobResponseDto(job));
         }
 
         [HttpGet("User/{userId}")]
-        public async Task<ActionResult<List<Models.Job>>> GetAllByUserId()
+        public async Task<ActionResult> GetAllByUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             var jobs = await _jobService.GetAllByUserId(userId);
@@ -43,7 +44,7 @@ namespace vabalas_api.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Models.Job>> CreateJob(JobAddRequestDto jobAddDto)
+        public async Task<ActionResult> CreateJob(JobAddRequestDto jobAddDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
             var job = await _jobService.AddJob(jobAddDto, userId);
@@ -51,21 +52,21 @@ namespace vabalas_api.Controllers
         }
         
         [HttpPut]
-        public async Task<ActionResult<Models.Job>> UpdateJob(JobUpdateRequestDto jobRequestDto)
+        public async Task<ActionResult> UpdateJob(JobUpdateRequestDto jobRequestDto)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            var job = await _jobService.UpdateJob(jobRequestDto, userId);
+            var job = await _jobService.UpdateJob(jobRequestDto, userId!);
             return Ok(MapJobToJobResponseDto(job));
         }
 
         [HttpDelete("{jobId}")]
-        public async Task<ActionResult<Models.Job>> DeleteJob(Guid jobId)
+        public async Task<ActionResult> DeleteJob(Guid jobId)
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier);
-            return Ok(await _jobService.DeleteJob(jobId, userId));
+            return Ok(await _jobService.DeleteJob(jobId, userId!));
         }
 
-        private static JobResponseDto MapJobToJobResponseDto(Models.Job job)
+        private static JobResponseDto MapJobToJobResponseDto(Job job)
         {
             return new JobResponseDto
             {
@@ -78,7 +79,7 @@ namespace vabalas_api.Controllers
             };
         }
 
-        private static List<JobResponseDto> MapJobListToJobResponseDto(List<Models.Job> jobs)
+        private static List<JobResponseDto> MapJobListToJobResponseDto(List<Job> jobs)
         {
             return jobs.Select(j => MapJobToJobResponseDto(j)).ToList();
         }

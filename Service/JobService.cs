@@ -1,4 +1,4 @@
-﻿using vabalas_api.Controllers.Job.Dtos;
+﻿using vabalas_api.DTOs;
 using vabalas_api.Enums;
 using vabalas_api.Exceptions;
 using vabalas_api.Models;
@@ -22,6 +22,7 @@ namespace vabalas_api.Service
         public async Task<Job> GetJobById(Guid jobId)
         {
             var job = await _data.Job.FindAsync(jobId);
+            // var job = _data.Job.FirstOrDefault(j => j.Id == jobId);
             if (job == null)
             {
                 throw new NotFoundException($"Job with id: {jobId} was not found.");

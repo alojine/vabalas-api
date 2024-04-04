@@ -58,23 +58,23 @@ namespace vabalas_api.Service
         public async Task<JobOffer> SendOffer(JobOfferRequestDto offerDto)
         {
             var offer = new JobOffer();
-            var client = await _userService.GetByEmail(offerDto.CustomerEmail);
+            var client = await _userService.GetByEmail(offerDto.CustomerEmail!);
             var job = await _jobService.GetJobById(offerDto.JobId);
             
-            if (client.Id == job.Owner.Id)
+            if (client.Id == job.OwnerId)
             {
                 throw new NotValidException($"Cannot create offer where user with id: {client.Id} is client and job owner.");
             } 
             if (offerDto.JobDate < DateTime.Now.AddHours(1))
             {
-                throw new NotSupportedException(
+                throw new NotValidException(
                     $"Offer with client id: {client.Id} cannot be offered less than 1 hour from current time.");
             }
             
             offer.SenderId = client.Id;
             offer.Job = await _jobService.GetJobById(offerDto.JobId);
             offer.OfferStatus = OfferStatus.Pending;
-            offer.Description = offerDto.Description;
+            offer.Description = offerDto.Description!;
             offer.JobDate = offerDto.JobDate;
             offer.CreatedAt = DateTime.Now;
             offer.UpdatedAt = DateTime.Now;

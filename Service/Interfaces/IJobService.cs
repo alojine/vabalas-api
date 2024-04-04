@@ -1,4 +1,4 @@
-﻿using vabalas_api.Controllers.Job.Dtos;
+﻿using vabalas_api.DTOs;
 using vabalas_api.Enums;
 using vabalas_api.Models;
 

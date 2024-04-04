@@ -9,9 +9,12 @@ public class UserService : IUserService
 {
     private readonly UserManager<VabalasUser> _userManager;
 
-    public UserService(UserManager<VabalasUser> userManager)
+    private readonly DataContext _data;
+
+    public UserService(UserManager<VabalasUser> userManager, DataContext data)
     {
         _userManager = userManager;
+        _data = data;
     }
     
     public async Task<List<VabalasUser>> GetAll()
@@ -31,7 +34,9 @@ public class UserService : IUserService
     
     public async Task<VabalasUser> GetByEmail(string email)
     {
-        var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
+        // var user = await _userManager.Users.FirstOrDefaultAsync(u => u.Email == email);
+        // var user = await _userManager.FindByEmailAsync(email);
+        var user = await _data.VabalasUsers.FirstOrDefaultAsync(u => u.Email == email);
         
         if (user == null)
         {

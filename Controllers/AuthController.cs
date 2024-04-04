@@ -13,7 +13,7 @@ using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegiste
 
 namespace vabalas_api.Controllers;
 
-[Route("api/[controller]")]
+[Route("api/register")]
 [ApiController]
 public class AuthController : ControllerBase
 {
@@ -31,7 +31,7 @@ public class AuthController : ControllerBase
     }
     
     [HttpPost]
-    [Route("Login")]
+    [Route("login")]
     public async Task<IActionResult> Login([FromBody] UserLoginDto requestDto)
     {
         if (!ModelState.IsValid)
@@ -55,7 +55,7 @@ public class AuthController : ControllerBase
     }
 
     [HttpPost]
-    [Route("Register")]
+    [Route("register")]
     public async Task<IActionResult> Register([FromBody] UserRegistrationDto requestDto)
     {
         if (!ModelState.IsValid)

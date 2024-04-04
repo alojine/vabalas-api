@@ -67,7 +67,7 @@ namespace vabalas_api
             builder.Services.AddScoped<IStatisticsService, StatisticsService>();
             builder.Services.AddScoped<IUserService,UserService>();
             builder.Services.AddScoped<IReviewService,ReviewSevice>();
-            // builder.Services.AddScoped<IJobOfferService, JobOfferService>();
+            builder.Services.AddScoped<IJobOfferService, JobOfferService>();
             
             builder.Services.AddSwaggerGen(options =>
             {
