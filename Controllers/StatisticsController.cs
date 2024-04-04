@@ -3,7 +3,7 @@ using vabalas_api.Service;
 
 namespace vabalas_api.Controllers.Statistics;
 
-[Route("api/[controller]")]
+[Route("api/statistics")]
 [ApiController]
 public class StatisticsController : ControllerBase
 {

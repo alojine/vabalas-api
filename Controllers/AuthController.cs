@@ -13,7 +13,7 @@ using JwtRegisteredClaimNames = Microsoft.IdentityModel.JsonWebTokens.JwtRegiste
 
 namespace vabalas_api.Controllers;
 
-[Route("api/register")]
+[Route("api/auth")]
 [ApiController]
 public class AuthController : ControllerBase
 {

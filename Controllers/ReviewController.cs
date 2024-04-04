@@ -1,9 +1,10 @@
 ﻿using Microsoft.AspNetCore.Mvc;
+using vabalas_api.DTOs;
 using vabalas_api.Service;
 
 namespace vabalas_api.Controllers.Review
 {
-    [Route("api/[controller]")]
+    [Route("api/reviews")]
 
     [ApiController]
     public class ReviewController : ControllerBase
@@ -19,20 +20,29 @@ namespace vabalas_api.Controllers.Review
         {
             return Ok(await _reviewService.GetAll());
         }
+    
+        [HttpGet("{reviewId}")]
+        public async Task<IActionResult> GetReviewById(Guid reviewId)
+        {
+            return Ok(await _reviewService.GetReviewById(reviewId));
+        }
+        
+        [HttpGet("{jobId}")]
+        public async Task<ActionResult> GetReviewByJobId(Guid jobId)
+        {
+            return Ok(await _reviewService.GetAllByJobId(jobId));
+        }        
+        
         [HttpPost]
-        // public async Task<ActionResult<Models.Review>> add(ReviewAddDto reviewDto)
-        // {
-        //     return Ok(await _reviewService.Add(reviewDto));
-        // }
+        public async Task<ActionResult> CreateReview(ReviewRequestDto reviewDto)
+        {
+            return Ok(await _reviewService.Add(reviewDto));
+        }
+        
         [HttpDelete("{reviewId}")]
-        public async Task<ActionResult<Models.Review>> delete(int reviewId)
+        public async Task<ActionResult> DeleteReview(Guid reviewId)
         {
             return Ok(await _reviewService.Delete(reviewId));
         }
-        // [HttpGet("{jobId}")]
-        // public async Task<ActionResult<List<Models.Review>>> getReviewById(Guid jobId)
-        // {
-        //     return Ok(await _reviewService.GetAllByJobId(jobId));
-        // }
     }
 }
