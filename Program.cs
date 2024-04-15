@@ -1,5 +1,6 @@
 ﻿global using vabalas_api.Data;
 global using Microsoft.EntityFrameworkCore;
+using System.Net;
 using System.Text;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Identity;
@@ -21,7 +22,7 @@ namespace vabalas_api
         {
             var builder = WebApplication.CreateBuilder(args);
             
-            var config = EnvConfig.InitializeEnvironemnt(); 
+            var config = EnvConfig.InitializeEnvironment(); 
 
             builder.Services.AddIdentity<VabalasUser, IdentityRole>()
                 .AddEntityFrameworkStores<DataContext>();
@@ -30,6 +31,13 @@ namespace vabalas_api
             {
                 jwt.Secret = config["JwtSettings:Key"]!;
                 jwt.ExpirationInHours = 2;
+            });
+
+            DotNetEnv.Env.Load();
+            var url = new Uri(Environment.GetEnvironmentVariable("EXPOSE_URL")!);
+            builder.WebHost.ConfigureKestrel(options =>
+            {
+                options.Listen(IPAddress.Parse(url.Host), url.Port);
             });
             
             builder.Services.AddAuthentication(x =>
