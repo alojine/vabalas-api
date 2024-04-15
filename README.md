@@ -1,13 +1,10 @@
 # VABALAS-API
-
+### A robust backend REST API built using ASP.NET Core and C#, Vabalas stands as a freelance and job-finding platform facilitating seamless job postings. Users can share job opportunities within the platform, extend personalized job offers, and provide feedback through reviews on freelancers' work quality. Vabalas empowers users with statistical tools to showcase top performers and gain insights into overall job distribution trends within the platform.
 ![zamzamzam.png](/Readme/OggyAndTheCockroaches.png)
-
-# Overview
-#### Vabalas-api is a backend api project made with asp.net core and c#. Vabalas enables users to share their job offerings to other users within the platform.
 
 # Requirements
 * [.NET 7.0](https://dotnet.microsoft.com/en-us/download/dotnet/7.0)
-* [SQL Server](https://www.microsoft.com/en-us/sql-server/sql-server-downloads)
+* [MySQL](https://www.mysql.com/downloads/)
 
 # Getting started
 ### 1. Clone the project
@@ -22,10 +19,15 @@ dotnet build
 dotnet run
 ```
 
-# Configuration
-* In order to to use full functionality of the app. Create ***.env*** and insert values.
+# Environment
+* Create ***.env*** at the root of the project and insert environment variables.
 ```bash
-DB_SERVER=SQL-SERVER-NAME
-DB_NAME=DATABASE-NAME
-JWT_SECRET=SECRET
+DB_SERVER=<HOST_NAME>
+DB_NAME=<DATABASE_NAME>
+DB_USER=<DATABASE_USERNAME>
+DB_USER=<DATABASE_PASSWORD>
+
+JWT_SECRET=<SECRET_KEY>
+
+EXPOSE_URL=<HOST_TO_EXPOSE>
 ```
