@@ -71,6 +71,7 @@ namespace vabalas_api.Controllers
             return new JobResponseDto
             {
                 JobId = job.Id,
+                UserId = job.OwnerId,
                 Title = job.Title,
                 Description = job.Description,
                 Category = JobCatogryParser.ToString(job.Category),
