@@ -27,9 +27,12 @@ public class UserControler : ControllerBase
         return Ok(MapUserToResponseDto(user));
     }
 
-    // get user jobs
-    
-    // get user offers
+    [HttpGet("{userId}")]
+    public async Task<ActionResult> GetUserById(String userId)
+    {
+        var user = await _userService.GetById(userId);
+        return Ok(MapUserToResponseDto(user));
+    }
 
     private static UserResponseDto MapUserToResponseDto(VabalasUser user)
     {
