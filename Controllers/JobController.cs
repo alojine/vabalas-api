@@ -28,7 +28,7 @@ namespace vabalas_api.Controllers
             return Ok(MapJobToJobResponseDto(job));
         }
 
-        [HttpGet("User/{userId}")]
+        [HttpGet("user/{userId}")]
         public async Task<ActionResult> GetAllByUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
@@ -71,6 +71,7 @@ namespace vabalas_api.Controllers
             return new JobResponseDto
             {
                 JobId = job.Id,
+                UserId = job.OwnerId,
                 Title = job.Title,
                 Description = job.Description,
                 Category = JobCatogryParser.ToString(job.Category),

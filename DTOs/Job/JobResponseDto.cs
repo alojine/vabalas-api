@@ -3,6 +3,7 @@ namespace vabalas_api.DTOs;
 public class JobResponseDto
 {
     public Guid JobId { get; set; }
+    public string UserId { get; set; }
     public string? Title { get; set; }
     public string? Description { get; set; }
     public string? Category { get; set; }

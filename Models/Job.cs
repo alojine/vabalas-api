@@ -20,7 +20,7 @@ namespace vabalas_api.Models
         
         public string Description { get; set; }
         
-        public JobCategory Category { get; set; }   
+        public JobCategory Category { get; set; } 
         
         public decimal Price { get; set; }
         
