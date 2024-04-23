@@ -28,7 +28,7 @@ namespace vabalas_api.Controllers
             return Ok(MapJobToJobResponseDto(job));
         }
 
-        [HttpGet("User/{userId}")]
+        [HttpGet("user/{userId}")]
         public async Task<ActionResult> GetAllByUserId()
         {
             var userId = User.FindFirstValue(ClaimTypes.NameIdentifier)!;
