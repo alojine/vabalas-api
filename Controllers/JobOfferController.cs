@@ -34,6 +34,7 @@ namespace vabalas_api.Controllers
             var jobOffer = await _jobOfferService.GetById(offerId);
             return Ok(OfferToDto(jobOffer));
         }
+        
 
         [HttpGet("status/{status}")]
         public async Task<IActionResult> GetByStatus(string status)
